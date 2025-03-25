@@ -19,4 +19,10 @@ public class Review {
 
     String comment;
     int reviewStar;
+
+    @ManyToOne
+    Customer customer;
+
+    @ManyToOne
+    Car car;
 }

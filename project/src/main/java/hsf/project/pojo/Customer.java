@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
@@ -17,7 +18,7 @@ import java.time.LocalDate;
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int customerId;
+    int id;
     String customerName;
     String mobile;
     LocalDate birthday;
@@ -29,4 +30,10 @@ public class Customer {
 
     @OneToOne(mappedBy = "customer", cascade = CascadeType.ALL)
     Account account;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    List<Review> reviewList;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    List<CarRental> carRentalList;
 }

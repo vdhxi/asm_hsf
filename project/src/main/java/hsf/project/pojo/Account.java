@@ -15,7 +15,7 @@ import lombok.experimental.FieldDefaults;
 public class Account {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int accountId;
+    int id;
     String accountName;
     String role;
 

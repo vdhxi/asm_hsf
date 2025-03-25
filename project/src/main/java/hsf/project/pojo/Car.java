@@ -6,6 +6,7 @@ import lombok.*;
 import lombok.experimental.FieldDefaults;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table
@@ -18,7 +19,7 @@ import java.time.LocalDate;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    int carId;
+    int id;
     String carName;
     int carModelYear;
     String color;
@@ -30,6 +31,14 @@ public class Car {
     @JsonBackReference
     CarProducer producer;
 
-    float rentPrice;
-    boolean status;
+    String url;
+
+    int rentPrice;
+    boolean isRented;
+
+    @OneToMany(mappedBy = "car")
+    List<Review> reviewList;
+
+    @OneToMany(mappedBy = "car")
+    List<CarRental> carRentalList;
 }
