@@ -13,6 +13,6 @@ public interface CarRepository extends JpaRepository<Car, Integer> {
     List<Car> findByColor(String color);
     List<Car> findByCapacityBetween(int min, int max);
     List<Car> findByCarModelYearBetween(int min, int max);
-    List<Car> findByRentedTrue();
+    List<Car> findByIsRentedTrue();
     Car findById(int id);
 }

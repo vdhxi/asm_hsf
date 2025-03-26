@@ -49,7 +49,7 @@ public class CarServiceImpl {
     }
 
     public List<Car> findAllCarsRented() {
-        return carRepository.findByRentedTrue();
+        return carRepository.findByIsRentedTrue();
     }
 
     @Transactional
@@ -129,7 +129,7 @@ public class CarServiceImpl {
     }
 
     public int countRentedCars() {
-        return carRepository.findByRentedTrue().size();
+        return carRepository.findByIsRentedTrue().size();
     }
 
     public int countUnRentedCars() {

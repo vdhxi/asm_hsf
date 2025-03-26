@@ -33,7 +33,7 @@
 
             <div class="col-3">
               <div class="site-logo">
-                <a href="${pageContext.request.contextPath}/home.jsp"><strong>CarRental</strong></a>
+                <a href="${pageContext.request.contextPath}/home"><strong>CarRental</strong></a>
               </div>
             </div>
 
@@ -43,11 +43,11 @@
 
               <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                 <ul class="site-menu main-menu js-clone-nav ml-auto ">
-                  <li class="active"><a href="${pageContext.request.contextPath}/home.jsp" class="nav-link">Home</a></li>
-                  <li><a href="${pageContext.request.contextPath}/listing.jsp" class="nav-link">Listing</a></li>
-                  <li><a href="${pageContext.request.contextPath}/testimonials.jsp" class="nav-link">Testimonials</a></li>
-                  <li><a href="${pageContext.request.contextPath}/contact.jsp" class="nav-link">Contact</a></li>
-                  <li><a href="${pageContext.request.contextPath}/management.jsp" class="nav-link">Management</a></li>
+                  <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
+                  <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
+                  <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
+                  <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+                  <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                 </ul>
               </nav>
             </div>
