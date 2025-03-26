@@ -48,6 +48,7 @@
                   <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
                   <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                  <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                 </ul>
               </nav>
             </div>

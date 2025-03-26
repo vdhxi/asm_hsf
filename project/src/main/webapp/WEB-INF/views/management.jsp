@@ -1,5 +1,5 @@
-<%@ taglib prefix="c" uri="http://java.sun.com/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!doctype html>
 <html lang="en">
 
@@ -52,6 +52,7 @@
                   <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
                   <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                  <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                 </ul>
               </nav>
             </div>
@@ -67,7 +68,6 @@
               <div class="intro">
                 <h1><strong>CAR</strong></h1>
                 <h2> MANAGEMENT</h2>
-                <div class="custom-breadcrumbs"><a href="${pageContext.request.contextPath}/home.jsp">Home</a> <span class="mx-2">/</span> <strong>Management</strong></div>
               </div>
             </div>
           </div>
@@ -126,33 +126,31 @@
                   <table class="table">
                     <thead>
                       <tr>
-                        <th>ID</th>
-                        <th>Logo</th>
                         <th>Name</th>
-                        <th>Description</th>
-                        <th>Status</th>
+                        <th>Address</th>
+                        <th>Country</th>
                         <th>Actions</th>
                       </tr>
                     </thead>
-                    <tbody>
+                    <c:forEach items="${carProducerList}" var="carProducer">
+                      <tbody>
                       <tr>
-                        <td>1</td>
-                        <td><img src="images/logo.jpg" alt="Brand Logo" style="width: 50px; height: 50px;"></td>
-                        <td>Ferrari</td>
-                        <td>Ferrari</td>
-                        <td><span class="badge badge-success">Active</span></td>
+                        <td>${carProducer.producerName}</td>
+                        <td>${carProducer.address}</td>
+                        <td>${carProducer.country}</td>
                         <td>
                           <div class="d-flex">
-                            <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#editBrandModal_${brand.id}">
+                            <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#editBrandModal_${carProducer.id}">
                               UPDATE
                             </button>
-                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteBrandModal_${brand.id}">
+                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteBrandModal_${carProducer.id}">
                               DELETE
                             </button>
                           </div>
                         </td>
                       </tr>
-                    </tbody>
+                      </tbody>
+                    </c:forEach>
                   </table>
                 </div>
               </div>
@@ -160,7 +158,7 @@
           </div>
 
           <!-- Products List Section -->
-          <div class="row">
+          <div class="row" style="margin-bottom: 50px">
             <div class="col-12">
               <div class="card">
                 <div class="card-header d-flex justify-content-between align-items-center">
@@ -169,39 +167,54 @@
                     ADD NEW CAR
                   </button>
                 </div>
-                <div class="card-body">
-                  <table class="table">
-                    <thead>
-                      <tr>
-                        <th>ID</th>
-                        <th>Image</th>
-                        <th>Name</th>
-                        <th>Price</th>
-                        <th>Brand</th>
-                        <th>Stock</th>
-                        <th>Status</th>
-                        <th>Actions</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        <td>1</td>
-                        <td><img src="images/product.jpg" alt="Product" style="width: 50px; height: 50px;"></td>
-                        <td>488GTB</td>
-                        <td>500000</td>
-                        <td>Ferrari</td>
-                        <td>1</td>
-                        <td><span class="badge badge-success">Active</span></td>
-                        <td>
-                          <button class="btn btn-info btn-sm">Edit</button>
-                          <button class="btn btn-danger btn-sm">Delete</button>
-                        </td>
-                      </tr>
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </div>
+          </div>
+
+          <div class="row">
+              <c:forEach items="${carList}" var="car">
+                <div class="col-md-6 col-lg-4 mb-4">
+                <div class="listing d-block  align-items-stretch">
+                  <div class="listing-img h-100 mr-4">
+                    <img src="${car.url}?timestamp=${System.currentTimeMillis()}" alt="Image" class="img-fluid" style="width: 300px; height: 200px">
+                  </div>
+                  <div class="listing-contents h-100">
+                    <h2><strong>${car.carName}</strong></h2>
+                    <h4>${car.producer.producerName}</h4>
+                    <div class="rent-price">
+                      <strong>$${car.rentPrice}</strong><span class="mx-1">/</span>day
+                    </div>
+                    <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                      <div class="listing-feature pr-4">
+                        <span class="caption">Capacity:</span>
+                        <span class="number">${car.capacity}</span>
+                      </div>
+                      <div class="listing-feature pr-4">
+                        <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#editProductModal_${car.id}">
+                          UPDATE
+                        </button>
+                      </div>
+                      <div class="listing-feature pr-4">
+                        <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#deleteProductModal_${car.id}">
+                          DELETE
+                        </button>
+                      </div>
+
+                    </div>
+                    <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                      <div class="listing-feature pr-4">
+                        <span class="badge ${car.rented ? 'badge-danger' : 'badge-success'}">
+                            ${car.rented ? 'Rented' : 'Available'}
+                        </span>
+                      </div>
+                    </div>
+                    <div>
+                      <p>${car.description}</p>
+                    </div>
+                  </div>
+                </div>
+                </div>
+              </c:forEach>
           </div>
         </div>
       </div>
@@ -211,97 +224,61 @@
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header bg3">
-              <h5 class="modal-title text-white">Add New Brand</h5>
-              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <h5 class="modal-title text-black">Add New Manufacture</h5>
+              <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="/hsf/management/brand/create" method="post" enctype="multipart/form-data">
+            <form action="/management/manufacture/add" method="post" enctype="multipart/form-data">
               <div class="modal-body">
                 <div class="form-group">
-                  <label>Brand Name</label>
+                  <label>Manufacture Name</label>
                   <input type="text" name="name" class="form-control" required>
                 </div>
                 <div class="form-group">
-                  <label>Description</label>
-                  <textarea name="description" class="form-control" rows="4" required></textarea>
+                  <label>Address</label>
+                  <input type="text" name="address" class="form-control" required>
                 </div>
                 <div class="form-group">
-                  <label>Brand Image</label>
-                  <div class="file-upload-section">
-                    <div class="custom-file mb-3">
-                      <input type="file" class="custom-file-input" id="addBrandImage" name="image" accept="image/*" onchange="previewImage(this, 'addBrandImagePreview')" required>
-                      <label class="custom-file-label" for="addBrandImage">
-                        <i class="zmdi zmdi-collection-image file-upload-icon"></i>Choose file...
-                      </label>
-                    </div>
-                    <div class="mt-3 text-center">
-                      <img id="addBrandImagePreview" src="#" alt="Logo Preview" style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
-                    </div>
-                  </div>
+                  <label>Country</label>
+                  <input type="text" name="country" class="form-control" required>
                 </div>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary bg3">Add Brand</button>
+                <button type="submit" class="btn btn-primary bg3">Add Manufacture</button>
               </div>
             </form>
           </div>
         </div>
       </div>
 
-
       <!-- Dynamic Brand Modals -->
-<%--      <c:forEach items="${brands}" var="brand">
+      <c:forEach items="${carProducerList}" var="carProducer">
         <!-- Dynamic Edit Brand Modal -->
-        <div class="modal fade" id="editBrandModal_${brand.id}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="editBrandModal_${carProducer.id}" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header bg3">
-                <h5 class="modal-title text-white">Edit Brand</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-black">Edit Brand</h5>
+                <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form action="/hsf/management/brand/update" method="post" enctype="multipart/form-data">
+              <form action="/management/manufacture/update" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                  <input type="hidden" name="id" value="${brand.id}">
+                  <input type="hidden" name="id" value="${carProducer.id}">
                   <div class="form-group">
-                    <label>Brand Name</label>
-                    <input type="text" name="name" class="form-control" value="${brand.name}" required>
+                    <label>Manufacture Name</label>
+                    <input type="text" name="name" class="form-control" value="${carProducer.producerName}" required>
                   </div>
                   <div class="form-group">
-                    <label>Description</label>
-                    <textarea name="description" class="form-control" rows="4" required>${brand.description}</textarea>
+                    <label>Address</label>
+                    <input type="text" name="address" class="form-control" value="${carProducer.address}" required>
                   </div>
                   <div class="form-group">
-                    <label>Current Image</label>
-                    <div class="text-center mb-3">
-                      <img id="currentBrandImage_${brand.id}" src="${brand.url}" alt="Current" style="max-width: 200px; max-height: 200px; object-fit: cover;" class="img-thumbnail">
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label>Change Image (optional)</label>
-                    <div class="file-upload-section">
-                      <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="editBrandImage_${brand.id}" name="image" accept="image/*" onchange="previewImage(this, 'editBrandImagePreview_${brand.id}')">
-                        <label class="custom-file-label" for="editBrandImage_${brand.id}">
-                          <i class="zmdi zmdi-collection-image file-upload-icon"></i>Choose file...
-                        </label>
-                      </div>
-                      <div class="mt-3 text-center">
-                        <img id="editBrandImagePreview_${brand.id}" src="#" alt="New Logo Preview" style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="form-group">
-                      <label>Status</label>
-                      <select name="status" class="form-control">
-                        <option value="True">Active</option>
-                        <option value="False">Disable</option>
-                      </select>
-                    </div>
+                    <label>Country</label>
+                    <input type="text" name="country" class="form-control" value="${carProducer.country}" required>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -313,81 +290,95 @@
           </div>
         </div>
         <!-- Dynamic Delete Brand Modal -->
-        <div class="modal fade" id="deleteBrandModal_${brand.id}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="deleteBrandModal_${carProducer.id}" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header bg-danger text-white">
+              <div class="modal-header bg-danger text-black">
                 <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <p>Are you sure you want to delete this brand?</p>
-                <p><strong>${brand.name}</strong></p>
-                <p>This action cannot be undone. All products associated with this brand will also be deleted.</p>
+                <p>Are you sure you want to delete this manufacture?</p>
+                <p><strong>${carProducer.producerName}</strong></p>
+                <p>This action cannot be undone. All cars associated with this brand will also be deleted.</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <form action="/hsf/management/brand/delete" method="post">
-                  <input type="hidden" name="id" value="${brand.id}">
+                <form action="/management/manufacture/delete" method="post">
+                  <input type="hidden" name="id" value="${carProducer.id}">
                   <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
               </div>
             </div>
           </div>
         </div>
-      </c:forEach>--%>
+      </c:forEach>
+
 
       <!-- Add Product Modal -->
       <div class="modal fade" id="addProductModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog modal-lg" role="document">
           <div class="modal-content">
             <div class="modal-header bg3">
-              <h5 class="modal-title text-white">Add New Product</h5>
-              <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+              <h5 class="modal-title text-black">Add New Car</h5>
+              <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <form action="/hsf/management/product/create" method="post" enctype="multipart/form-data">
+            <form action="/management/car/add" method="post" enctype="multipart/form-data">
               <div class="modal-body">
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <label>Product Name</label>
+                    <label>Name</label>
                     <input type="text" name="name" class="form-control" required>
                   </div>
                   <div class="col-md-6 form-group">
-                    <label>Price</label>
-                    <input type="number" name="price" class="form-control" step="1" required>
+                    <label>Year</label>
+                    <input type="text" name="year" class="form-control" required>
                   </div>
                 </div>
+
                 <div class="row">
                   <div class="col-md-6 form-group">
-                    <label>Brand</label>
-                    <%--<select name="brandId" class="form-control" required>
-                      <option value="">Select Brand</option>
-                      <c:forEach items="${brands}" var="brand">
-                        <option value="${brand.id}">${brand.name}</option>
-                      </c:forEach>
-
-                    </select>--%>
+                    <label>Color</label>
+                    <input type="text" name="color" class="form-control" required>
                   </div>
                   <div class="col-md-6 form-group">
-                    <label>Stock</label>
-                    <input type="number" name="stock" class="form-control" required>
+                    <label>Capacity</label>
+                    <input type="text" name="capacity" class="form-control" required>
+                  </div>
+                </div>
+
+                <div class="row">
+                  <div class="col-md-6 form-group">
+                    <label>Price</label>
+                    <input type="text" name="price" class="form-control" required>
+                  </div>
+                  <div class="col-md-6 form-group">
+                    <label>Manufacture</label>
+                    <select name="producerId" class="form-control" required>
+                      <option value="">Select Manufacture</option>
+                      <c:forEach items="${carProducerList}" var="carProducer">
+                        <option value="${carProducer.id}">${carProducer.producerName}</option>
+                      </c:forEach>
+
+                    </select>
                   </div>
                 </div>
                 <div class="form-group">
                   <label>Description</label>
                   <textarea name="description" class="form-control" rows="4" required></textarea>
                 </div>
+
                 <div class="form-group">
                   <label>Product Image</label>
                   <div class="file-upload-section">
                     <div class="custom-file mb-3">
                       <input type="file" class="custom-file-input" id="addProductImage" name="image" accept="image/*" onchange="previewImage(this, 'addImagePreview')" required>
                       <label class="custom-file-label" for="addProductImage">
-                        <i class="zmdi zmdi-collection-image file-upload-icon"></i>Choose file...
+                        Choose file...
                       </label>
                     </div>
                     <div class="mt-3 text-center">
@@ -396,83 +387,96 @@
                   </div>
                 </div>
               </div>
+
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <button type="submit" class="btn btn-primary bg3">Add Product</button>
+                <button type="submit" class="btn btn-primary bg3">Add Car</button>
               </div>
             </form>
           </div>
         </div>
       </div>
       <!-- Dynamic Edit Product Modals -->
-<%--      <c:forEach items="${products}" var="product">
-        <div class="modal fade" id="editProductModal_${product.id}" tabindex="-1" role="dialog" aria-hidden="true">
+      <c:forEach items="${carList}" var="car">
+        <div class="modal fade" id="editProductModal_${car.id}" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg" role="document">
             <div class="modal-content">
               <div class="modal-header bg3">
-                <h5 class="modal-title text-white">Edit Product</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <h5 class="modal-title text-black">Edit Product</h5>
+                <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form action="/hsf/management/product/update" method="post" enctype="multipart/form-data">
+              <form action="/management/car/update" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
-                  <input type="hidden" name="id" value="${product.id}">
+                  <input type="hidden" name="id" value="${car.id}">
                   <div class="row">
                     <div class="col-md-6 form-group">
-                      <label>Product Name</label>
-                      <input type="text" name="name" class="form-control" value="${product.name}" required>
+                      <label>Name</label>
+                      <input type="text" name="name" class="form-control" value="${car.carName}" required>
                     </div>
                     <div class="col-md-6 form-group">
-                      <label>Price</label>
-                      <input type="number" name="price" class="form-control" step="0.01" value="${product.price}" required>
+                      <label>Year</label>
+                      <input type="text" name="year" class="form-control" value="${car.carModelYear}" required>
                     </div>
                   </div>
+
                   <div class="row">
                     <div class="col-md-6 form-group">
-                      <label>Brand</label>
-                      <select name="brandId" class="form-control" required>
-                        <option value="">Select Brand</option>
-                        <c:forEach items="${brands}" var="brand">
-                          <option value="${brand.id}" ${product.brand.id == brand.id ? 'selected' : ''}>${brand.name}</option>
-                        </c:forEach>
-                      </select>
+                      <label>Color</label>
+                      <input type="text" name="color" class="form-control" value="${car.color}" required>
                     </div>
                     <div class="col-md-6 form-group">
-                      <label>Stock</label>
-                      <input type="number" name="stock" class="form-control" value="${product.stock}" required>
+                      <label>Capacity</label>
+                      <input type="text" name="capacity" class="form-control" value="${car.capacity}" required>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-md-6 form-group">
+                      <label>Price</label>
+                      <input type="text" name="price" value="${car.rentPrice}" class="form-control" required>
+                    </div>
+                    <div class="col-md-6 form-group">
+                      <label>Manufacture</label>
+                      <select name="producerId" class="form-control" required>
+                        <option value="">Select Manufacture</option>
+                        <c:forEach items="${carProducerList}" var="carProducer">
+                          <option value="${carProducer.id}" ${car.producer.id == carProducer.id ? 'selected' : ''}>${carProducer.producerName}</option>
+                        </c:forEach>
+                      </select>
                     </div>
                   </div>
                   <div class="form-group">
                     <label>Description</label>
-                    <textarea name="description" class="form-control" rows="4" required></textarea>
+                    <textarea name="description" class="form-control" rows="4" required>${car.description}</textarea>
                   </div>
                   <div class="form-group">
                     <label>Current Image</label>
                     <div class="text-center mb-3">
-                      <img id="currentImage_${product.id}" src="${product.url}" alt="Current" style="max-width: 200px; max-height: 200px; object-fit: cover;" class="img-thumbnail">
+                      <img id="currentImage_${car.id}" src="${car.url}" alt="Current" style="max-width: 200px; max-height: 200px; object-fit: cover;" class="img-thumbnail">
                     </div>
                   </div>
                   <div class="form-group">
                     <label>Change Image (optional)</label>
                     <div class="file-upload-section">
                       <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="editProductImage_${product.id}" name="image" accept="image/*" onchange="previewImage(this, 'editImagePreview_${product.id}')">
-                        <label class="custom-file-label" for="editProductImage_${product.id}">
+                        <input type="file" class="custom-file-input" id="editProductImage_${car.id}" name="image" accept="image/*" onchange="previewImage(this, 'editImagePreview_${car.id}')">
+                        <label class="custom-file-label" for="editProductImage_${car.id}">
                           <i class="zmdi zmdi-collection-image file-upload-icon"></i>Choose file...
                         </label>
                       </div>
                       <div class="mt-3 text-center">
-                        <img id="editImagePreview_${product.id}" src="#" alt="New Image Preview" style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
+                        <img id="editImagePreview_${car.id}" src="#" alt="New Image Preview" style="max-width: 200px; max-height: 200px; display: none;" class="img-thumbnail">
                       </div>
                     </div>
                   </div>
                   <div class="row">
-                    <div class="form-group">
+                    <div class="col-md-12 form-group">
                       <label>Status</label>
                       <select name="status" class="form-control">
-                        <option value="True">Active</option>
-                        <option value="False">Disable</option>
+                        <option value="True">Rented</option>
+                        <option value="False">Available</option>
                       </select>
                     </div>
                   </div>
@@ -487,24 +491,24 @@
         </div>
 
         <!-- Dynamic Delete Modal -->
-        <div class="modal fade" id="deleteProductModal_${product.id}" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal fade" id="deleteProductModal_${car.id}" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog" role="document">
             <div class="modal-content">
-              <div class="modal-header bg-danger text-white">
+              <div class="modal-header bg-danger text-black">
                 <h5 class="modal-title">Confirm Delete</h5>
-                <button type="button" class="close text-white" data-dismiss="modal" aria-label="Close">
+                <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
               <div class="modal-body">
-                <p>Are you sure you want to delete this product?</p>
-                <p><strong>${product.name}</strong></p>
+                <p>Are you sure you want to delete this car?</p>
+                <p><strong>${car.carName}</strong></p>
                 <p>This action cannot be undone.</p>
               </div>
               <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-                <form action="/hsf/management/product/delete" method="post">
-                  <input type="hidden" name="id" value="${product.id}">
+                <form action="/management/car/delete" method="post">
+                  <input type="hidden" name="id" value="${car.id}">
                   <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
               </div>
@@ -540,5 +544,34 @@
     <script src="js/bootstrap-datepicker.min.js"></script>
     <script src="js/aos.js"></script>
     <script src="js/main.js"></script>
+    <script>
+      // Add this to your existing scripts
+      $(document).ready(function() {
+        // Toggle sidebar on mobile
+        $('.toggle-sidebar').click(function() {
+          $('.sidebar').toggleClass('active');
+        });
+
+        // Initialize file input display
+        $('.custom-file-input').on('change', function() {
+          var fileName = $(this).val().split('\\').pop();
+          $(this).next('.custom-file-label').html(fileName);
+        });
+      });
+
+      // Function to preview images before upload
+      function previewImage(input, previewId) {
+        if (input.files && input.files[0]) {
+          var reader = new FileReader();
+
+          reader.onload = function(e) {
+            $('#' + previewId).attr('src', e.target.result);
+            $('#' + previewId).css('display', 'block');
+          }
+
+          reader.readAsDataURL(input.files[0]);
+        }
+      }
+    </script>
   </body>
 </html> 

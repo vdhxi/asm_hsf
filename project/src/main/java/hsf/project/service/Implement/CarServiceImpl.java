@@ -27,35 +27,40 @@ public class CarServiceImpl {
         return carRepository.findById(id);
     }
 
-    public List<Car> findAllCars() {
+    public List<Car> getAllCars() {
         return carRepository.findAll();
     }
 
-    public List<Car> findCarsByBrand(String brand) {
+    public List<Car> getAllCarsByBrand(String brand) {
         CarProducer carProducer = carProducerRepository.findCarProducerByProducerName(brand);
         return carRepository.findByProducer(carProducer);
     }
 
-    public List<Car> findCarsByColor(String color) {
+    public List<Car> getAllCarsByColor(String color) {
         return carRepository.findByColor(color);
     }
 
-    public List<Car> findCarsByCapacity(int min, int max) {
+    public List<Car> getAllCarsByCapacity(int min, int max) {
         return carRepository.findByCapacityBetween(min, max);
     }
 
-    public List<Car> findCarsByModelYear(int min, int max) {
+    public List<Car> getAllCarsByModelYear(int min, int max) {
         return carRepository.findByCarModelYearBetween(min, max);
     }
 
-    public List<Car> findAllCarsRented() {
+    public List<Car> getAllCarsRented() {
         return carRepository.findByIsRentedTrue();
     }
 
+    public List<Car> getAllCarsAvailable() {
+        return carRepository.findByIsRentedFalse();
+    }
+
     @Transactional
-    public void createCar(String name, int year, String color, int capacity, String description, LocalDate importDate, int price, int producerId, MultipartFile image) {
+    public void createCar(String name, int year, String color, int capacity, String description, int price, int producerId, MultipartFile image) {
         try {
             CarProducer carProducer = carProducerRepository.findById(producerId).orElse(null);
+            LocalDate importDate = LocalDate.now();
             Car car = Car.builder()
                     .carName(name)
                     .carModelYear(year)

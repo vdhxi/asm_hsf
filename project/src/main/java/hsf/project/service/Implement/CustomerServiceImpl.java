@@ -31,7 +31,17 @@ public class CustomerServiceImpl {
     }
 
     @Transactional
-    public void create(Customer customer) {
+    public void create(String name, String mobile, LocalDate birthday, String identity, String licenceNumber, LocalDate licenceDate, String email, String password) {
+        Customer customer = Customer.builder()
+                .customerName(name)
+                .mobile(mobile)
+                .birthday(birthday)
+                .identityCard(identity)
+                .licenceNumber(licenceNumber)
+                .licenceDate(licenceDate)
+                .email(email)
+                .password(password)
+                .build();
         customerRepository.save(customer);
         Account account = Account.builder()
                 .customer(customer)

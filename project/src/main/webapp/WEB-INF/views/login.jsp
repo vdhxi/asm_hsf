@@ -68,19 +68,19 @@
                         </div>
                     </div>
 
-                    <form class="trip-form">
+                    <form class="trip-form" action="/login" method="post">
                         <h3><strong>Login to continue your trip</strong></h3>
                         <br>
                         <div class="row align-items-center">
                             <div class="mb-3 mb-md-0 col-md-3">
                                 <div class="form-control-wrap">
-                                    <input type="text" id="cf-3" placeholder="Email" class="form-control">
+                                    <input type="text" name="email" placeholder="Email" class="form-control">
 
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
                                 <div class="form-control-wrap">
-                                    <input type="password" id="cf-4" placeholder="Password" class="form-control">
+                                    <input type="password" name="password" placeholder="Password" class="form-control">
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
