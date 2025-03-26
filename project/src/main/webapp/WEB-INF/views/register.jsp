@@ -68,29 +68,63 @@
                         </div>
                     </div>
 
-                    <form class="trip-form">
-                        <h3><strong>Login to continue your trip</strong></h3>
+                    <form class="trip-form" method="post">
+                        <h3><strong>Fill out to start your journey now</strong></h3>
                         <br>
                         <div class="row align-items-center">
-                            <div class="mb-3 mb-md-0 col-md-3">
+                            <div class="mb-6 mb-md-0 col-md-6">
+                                Name
                                 <div class="form-control-wrap">
-                                    <input type="text" id="cf-3" placeholder="Email" class="form-control">
-
+                                    <input type="text" name="name" placeholder="How we call you?" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
+                                Phone number
                                 <div class="form-control-wrap">
-                                    <input type="password" id="cf-4" placeholder="Password" class="form-control">
+                                    <input type="text" name="mobile" placeholder="Leave the number" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
-                                <input type="submit" value="Login" class="btn btn-primary btn-block py-3">
+                                Date of birth
+                                <div class="form-control-wrap">
+                                    <input type="date" name="dob" placeholder="Date of birth" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-6 mb-md-0 col-md-6">
+                                Identity number
+                                <div class="form-control-wrap">
+                                    <input type="text" name="identity" placeholder="Identity number" class="form-control" required>
+                                </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
-                                <a href="/register">Don't have an account? Click here</a>
+                                Licence number
+                                <div class="form-control-wrap">
+                                    <input type="text" name="licenceNumber" placeholder="Licence number" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-3">
+                                Licence date
+                                <div class="form-control-wrap">
+                                    <input type="date" name="licenceDate" placeholder="Licence date" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-6 mb-md-0 col-md-6">
+                                Email
+                                <div class="form-control-wrap">
+                                    <input type="email" name="email" placeholder="Email" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-3">
+                                Password
+                                <div class="form-control-wrap">
+                                    <input type="password" name="password" placeholder="Password" class="form-control" required>
+                                </div>
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-3">
+                                It seems to be done...
+                                <input type="submit" value="Let's go" class="btn btn-primary btn-block py-3">
                             </div>
                         </div>
-
                     </form>
 
                 </div>
