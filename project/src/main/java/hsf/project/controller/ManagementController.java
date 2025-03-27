@@ -34,7 +34,7 @@ public class ManagementController {
             return "redirect:/login";
         } else {
             if (!customer.getAccount().getRole().equalsIgnoreCase("ADMIN")) {
-                return "redirect:/login";
+                return "redirect:/home";
             }
         }
         List<CarProducer> carProducerList = carProducerService.getAllCarProducers();

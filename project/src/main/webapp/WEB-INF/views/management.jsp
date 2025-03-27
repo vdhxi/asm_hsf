@@ -50,7 +50,7 @@
                   <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                   <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-                  <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+                  <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                   <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                 </ul>
@@ -129,7 +129,8 @@
                         <th>Name</th>
                         <th>Address</th>
                         <th>Country</th>
-                        <th>Actions</th>
+                        <th>Total cars</th>
+                        <th></th>
                       </tr>
                     </thead>
                     <c:forEach items="${carProducerList}" var="carProducer">
@@ -138,14 +139,19 @@
                         <td>${carProducer.producerName}</td>
                         <td>${carProducer.address}</td>
                         <td>${carProducer.country}</td>
+                        <td>${carProducer.cars.size()}</td>
                         <td>
-                          <div class="d-flex">
-                            <button type="button" class="btn btn-sm btn-info mr-2" data-toggle="modal" data-target="#editBrandModal_${carProducer.id}">
-                              UPDATE
-                            </button>
-                            <button type="button" class="btn btn-sm btn-danger" data-toggle="modal" data-target="#deleteBrandModal_${carProducer.id}">
-                              DELETE
-                            </button>
+                          <div class="d-flex col-md-4">
+                            <div class="listing-feature pr-4">
+                              <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#editBrandModal_${carProducer.id}">
+                                UPDATE
+                              </button>
+                            </div>
+                            <div class="listing-feature pr-4">
+                              <button type="button" class="btn btn-outline-danger btn-block" data-toggle="modal" data-target="#deleteBrandModal_${carProducer.id}">
+                                DELETE
+                              </button>
+                            </div>
                           </div>
                         </td>
                       </tr>
@@ -190,6 +196,21 @@
                         <span class="number">${car.capacity}</span>
                       </div>
                       <div class="listing-feature pr-4">
+                        <span class="caption">Color:</span>
+                        <span class="number">${car.color}</span>
+                      </div>
+                      <div class="listing-feature pr-4">
+                        <span class="caption">Year Model:</span>
+                        <span class="number">${car.carModelYear}</span>
+                      </div>
+                    </div>
+                    <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                      <div class="listing-feature pr-4">
+                        <span class="badge ${car.rented ? 'badge-danger' : 'badge-success'}">
+                            ${car.rented ? 'Rented' : 'Available'}
+                        </span>
+                      </div>
+                      <div class="listing-feature pr-4">
                         <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#editProductModal_${car.id}">
                           UPDATE
                         </button>
@@ -199,13 +220,11 @@
                           DELETE
                         </button>
                       </div>
-
                     </div>
                     <div class="d-block d-md-flex mb-3 border-bottom pb-3">
                       <div class="listing-feature pr-4">
-                        <span class="badge ${car.rented ? 'badge-danger' : 'badge-success'}">
-                            ${car.rented ? 'Rented' : 'Available'}
-                        </span>
+                        <span class="caption">Import date:</span>
+                        <span class="number">${car.importDate}</span>
                       </div>
                     </div>
                     <div>
@@ -245,7 +264,6 @@
                 </div>
               </div>
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary bg3">Add Manufacture</button>
               </div>
             </form>
@@ -282,7 +300,6 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="submit" class="btn btn-primary bg3">Save Changes</button>
                 </div>
               </form>
@@ -389,7 +406,6 @@
               </div>
 
               <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                 <button type="submit" class="btn btn-primary bg3">Add Car</button>
               </div>
             </form>
@@ -482,7 +498,6 @@
                   </div>
                 </div>
                 <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
                   <button type="submit" class="btn btn-primary bg3">Save Changes</button>
                 </div>
               </form>
@@ -515,7 +530,7 @@
             </div>
           </div>
         </div>
-      </c:forEach>--%>
+      </c:forEach>
 
       <footer class="container">
         <div class="row pt-5 mt-5 text-center">

@@ -26,15 +26,38 @@ public class CarRentalServiceImpl {
     CarProducerRepository carProducerRepository;
 
     public CarRental getCarRentalById(int id) {
+        CarRental carRental = carRentalRepository.findById(id);
         return carRentalRepository.findById(id);
     }
 
     public List<CarRental> getAllCarRentals() {
-        return carRentalRepository.findAll();
+        List<CarRental> list = carRentalRepository.findAll();
+        if (!list.isEmpty()) {
+            for (CarRental carRental : list) {
+                if (!carRental.getPickupDate().isBefore(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.RENTING);
+                }
+                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.COMPLETED);
+                }
+            }
+        }
+        return list;
     }
 
     public List<CarRental> getAllByCustomer(Customer customer) {
-        return carRentalRepository.findByCustomer(customer);
+        List<CarRental> list = carRentalRepository.findByCustomer(customer);
+        if (!list.isEmpty()) {
+            for (CarRental carRental : list) {
+                if (!carRental.getPickupDate().isBefore(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.RENTING);
+                }
+                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.COMPLETED);
+                }
+            }
+        }
+        return list;
     }
 
     public List<CarRental> getAllByCar(Car car) {
@@ -75,13 +98,13 @@ public class CarRentalServiceImpl {
                 .customer(customer)
                 .car(car)
                 .build();
+        System.out.println(carRental.getCustomer().getCustomerName());
         return carRentalRepository.save(carRental);
     }
 
     @Transactional
-    public void updateCarRental(int id, LocalDate pickupDate, LocalDate returnDate, int price, Car car) {
+    public void updateCarRental(int id, LocalDate returnDate, int price, Car car) {
         CarRental carRental = getCarRentalById(id);
-        carRental.setPickupDate(pickupDate);
         carRental.setReturnDate(returnDate);
         carRental.setRentPrice(price);
         carRental.setCar(car);

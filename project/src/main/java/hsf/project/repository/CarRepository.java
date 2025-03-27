@@ -11,10 +11,6 @@ import java.util.List;
 
 @Repository
 public interface CarRepository extends JpaRepository<Car, Integer> {
-    List<Car> findByProducer(CarProducer producer);
-    List<Car> findByColor(String color);
-    List<Car> findByCapacityBetween(int min, int max);
-    List<Car> findByCarModelYearBetween(int min, int max);
     List<Car> findByIsRentedTrue();
     List<Car> findByIsRentedFalse();
     Car findById(int id);

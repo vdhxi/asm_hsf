@@ -1,3 +1,4 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!doctype html>
 <html lang="en">
@@ -46,7 +47,7 @@
                   <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                   <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-                  <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+                  <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                   <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                 </ul>
@@ -69,29 +70,28 @@
                 </div>
               </div>
               
-              <form class="trip-form">
+              <form class="trip-form" action="/search" method="get">
                 
                 <div class="row align-items-center">
                   
                   <div class="mb-3 mb-md-0 col-md-3">
-                    <select name="" id="" class="custom-select form-control">
-                      <option value="">Select Type</option>
-                      <option value="">Ferrari</option>
-                      <option value="">Toyota</option>
-                      <option value="">Ford</option>
-                      <option value="">Lamborghini</option>
+                    <select name="id" id="carProducer" class="custom-select form-control">
+                      <c:forEach items="${carProducerList}" var="carProducer">
+                        <option value="${carProducer.id}">${carProducer.producerName}</option>
+                      </c:forEach>
                     </select>
+
                   </div>
                   <div class="mb-3 mb-md-0 col-md-3">
                     <div class="form-control-wrap">
-                      <input type="text" id="cf-3" placeholder="Pick up" class="form-control datepicker px-3">
+                      <input type="text" name="from" placeholder="Pick up" class="form-control datepicker px-3">
                       <span class="icon icon-date_range"></span>
 
                     </div>
                   </div>
                   <div class="mb-3 mb-md-0 col-md-3">
                     <div class="form-control-wrap">
-                      <input type="text" id="cf-4" placeholder="Drop off" class="form-control datepicker px-3">
+                      <input type="text" name="to" placeholder="Drop off" class="form-control datepicker px-3">
                       <span class="icon icon-date_range"></span>
                     </div>
                   </div>

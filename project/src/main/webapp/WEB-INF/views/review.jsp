@@ -51,8 +51,9 @@
                   <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                   <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-                  <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+                  <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                  <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                 </ul>
               </nav>
             </div>

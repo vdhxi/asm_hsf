@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 
   <link rel="stylesheet" href="${pageContext.request.contextPath}/fonts/icomoon/style.css">
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/bootstrap.min.css">
@@ -20,6 +21,7 @@
 
   <!-- MAIN CSS -->
   <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
+
 </head>
 
 <body>
@@ -44,8 +46,9 @@
               <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
               <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
               <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-              <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+              <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
               <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+              <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
             </ul>
           </nav>
         </div>
@@ -82,7 +85,47 @@
           <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
         </div>
       </div>
+      <div class="row mb-5">
+        <!-- Sort By -->
+        <div class="col-md-4">
+          <h5 class="fw-bold">Sort By</h5>
+          <ul class="list-unstyled">
+            <li><a href="/search/ascending" class="text-decoration-none text-dark">Price: Low to High</a></li>
+            <li><a href="/search/descending" class="text-decoration-none text-dark">Price: High to Low</a></li>
+          </ul>
+        </div>
 
+        <!-- Price -->
+        <div class="col-md-4">
+          <h5 class="fw-bold">Price</h5>
+            <form action="/search/price">
+              <input class="col-md-2" type="text" name="min"> -
+              <input class="col-md-2" type="text" name="max">
+              <input type="submit" class="btn btn-sm" value="Search">
+            </form>
+        </div>
+
+        <!-- Tags -->
+        <div class="col-md-4">
+          <h5 class="fw-bold">Manufacture</h5>
+          <div class="d-flex">
+            <div>
+              <form action="/search/manufacture">
+                <button class="btn btn-outline-secondary btn-sm me-2 mb-2">All</button>
+                <input type="hidden" name="id" value="0">
+              </form>
+            </div>
+            <c:forEach items="${carProducerList}" var="carProducer">
+              <div>
+                <form action="/search/manufacture">
+                  <button class="btn btn-outline-secondary btn-sm me-2 mb-2">${carProducer.producerName}</button>
+                  <input type="hidden" name="id" value="${carProducer.id}">
+                </form>
+              </div>
+            </c:forEach>
+          </div>
+        </div>
+      </div>
 
       <div class="row">
         <c:forEach items="${carList}" var="car">
@@ -113,7 +156,7 @@
                 </div>
                 <div>
                   <p>${car.description}</p>
-                  <p><a href="#" class="btn btn-primary btn-sm">Rent Now</a></p>
+                  <p><a href="/detail/${car.id}" class="btn btn-primary btn-sm">Rent Now</a></p>
                 </div>
               </div>
             </div>

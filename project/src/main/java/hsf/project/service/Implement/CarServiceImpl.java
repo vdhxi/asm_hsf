@@ -1,8 +1,11 @@
 package hsf.project.service.Implement;
 
+import hsf.project.enums.RentalStatus;
 import hsf.project.pojo.Car;
 import hsf.project.pojo.CarProducer;
+import hsf.project.pojo.CarRental;
 import hsf.project.repository.CarProducerRepository;
+import hsf.project.repository.CarRentalRepository;
 import hsf.project.repository.CarRepository;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +16,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -21,6 +27,7 @@ import java.util.List;
 public class CarServiceImpl {
     CarRepository carRepository;
     CarProducerRepository carProducerRepository;
+    CarRentalRepository carRentalRepository;
     SupabaseService supabaseService;
 
     public Car findCarById(int id) {
@@ -31,21 +38,71 @@ public class CarServiceImpl {
         return carRepository.findAll();
     }
 
-    public List<Car> getAllCarsByBrand(String brand) {
-        CarProducer carProducer = carProducerRepository.findCarProducerByProducerName(brand);
-        return carRepository.findByProducer(carProducer);
+    //Most important list for to operate filter
+    public List<Car> getAllCarsAvailableBetween(LocalDate from, LocalDate to) {
+        List<CarRental> carRentalList = carRentalRepository.findByPickupDateAfterAndReturnDateBefore(from, to);
+        List<Car> carList = new ArrayList<>(carRepository.findAll());
+        List<Car> carsRented = new ArrayList<>();
+        if (!carRentalList.isEmpty()) {
+            for (CarRental carRental : carRentalList) {
+                if (carRental.getStatus() != RentalStatus.COMPLETED) {
+                    carsRented.add(carRental.getCar());
+                }
+            }
+        }
+        carList.removeAll(carsRented);
+        return carList;
     }
 
-    public List<Car> getAllCarsByColor(String color) {
-        return carRepository.findByColor(color);
+    public List<Car> getAllCarsByBrand(int id, List<Car> carList) {
+        List<Car> carsAllow = new ArrayList<>();
+        if (!carList.isEmpty()) {
+            for (Car car : carList) {
+                System.out.println(car.getCarName());
+                if (car.getProducer().getId() == id) {
+                    carsAllow.add(car);
+                }
+            }
+        }
+        return carsAllow;
     }
 
-    public List<Car> getAllCarsByCapacity(int min, int max) {
-        return carRepository.findByCapacityBetween(min, max);
+    public List<Car> getAllCarsByCapacity(List<Car> carList, int min, int max) {
+        List<Car> carsAllow = new ArrayList<>();
+        if (!carList.isEmpty()) {
+            for (Car car : carList) {
+                if (car.getCapacity() >= min && car.getCapacity() <= max) {
+                    carsAllow.add(car);
+                }
+            }
+        }
+        return carsAllow;
     }
 
-    public List<Car> getAllCarsByModelYear(int min, int max) {
-        return carRepository.findByCarModelYearBetween(min, max);
+    public List<Car> getAllCarsByPrice(List<Car> carList, int min, int max) {
+        List<Car> carsAllow = new ArrayList<>();
+        if (!carList.isEmpty()) {
+            for (Car car : carList) {
+                if (car.getRentPrice() >= min && car.getRentPrice() <= max) {
+                    carsAllow.add(car);
+                }
+            }
+        }
+        return carsAllow;
+    }
+
+    public List<Car> sortByPriceAscending(List<Car> carList) {
+        if (!carList.isEmpty()) {
+            Collections.sort(carList, Comparator.comparingInt(Car::getRentPrice));
+        }
+        return carList;
+    }
+
+    public List<Car> sortByPriceDescending(List<Car> carList) {
+        if (!carList.isEmpty()) {
+            Collections.sort(carList, Comparator.comparingInt(Car::getRentPrice).reversed());
+        }
+        return carList;
     }
 
     public List<Car> getAllCarsRented() {

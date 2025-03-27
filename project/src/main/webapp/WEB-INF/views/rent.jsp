@@ -46,8 +46,9 @@
                             <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                             <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                             <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-                            <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
+                            <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                             <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                            <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -68,61 +69,45 @@
                         </div>
                     </div>
 
-                    <form class="trip-form" action="/user" method="post">
+                    <form class="trip-form" action="/rent/create" method="post">
                         <h3><strong>Fill out to start your journey now</strong></h3>
                         <br>
                         <div class="row align-items-center">
                             <div class="mb-6 mb-md-0 col-md-6">
                                 Name
                                 <div class="form-control-wrap">
-                                    <input type="text" name="name" placeholder="How we call you?" class="form-control" required>
+                                    <input type="text" value="${customer.customerName}" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
-                                Phone number
+                                Pickup Date
                                 <div class="form-control-wrap">
-                                    <input type="text" name="mobile" placeholder="Leave the number" class="form-control" required>
+                                    <input type="date" name="pickUpDate" placeholder="pickUpDate" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
-                                Date of birth
+                                Return Date
                                 <div class="form-control-wrap">
-                                    <input type="date" name="dob" placeholder="Date of birth" class="form-control" required>
+                                    <input type="date" name="returnDate" placeholder="Date of birth" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-6 mb-md-0 col-md-6">
-                                Identity number
+                                Total
                                 <div class="form-control-wrap">
-                                    <input type="text" name="identity" placeholder="Identity number" class="form-control" required>
+                                    <input type="number" id="totalPrice" name="totalPrice" class="form-control" readonly data-rent-price="${car.rentPrice}">
+                                    <input type="hidden" id="hiddenTotalPrice" name="totalPrice">
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
-                                Licence number
-                                <div class="form-control-wrap">
-                                    <input type="text" name="licenceNumber" placeholder="Licence number" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="mb-3 mb-md-0 col-md-3">
-                                Licence date
-                                <div class="form-control-wrap">
-                                    <input type="date" name="licenceDate" placeholder="Licence date" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="mb-6 mb-md-0 col-md-6">
-                                Email
-                                <div class="form-control-wrap">
-                                    <input type="email" name="email" placeholder="Email" class="form-control" required>
-                                </div>
-                            </div>
-                            <div class="mb-3 mb-md-0 col-md-3">
-                                Password
-                                <div class="form-control-wrap">
-                                    <input type="password" name="password" placeholder="Password" class="form-control" required>
-                                </div>
+                                <input type="hidden" name="id" value="${car.id}">
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
                                 <p></p>
-                                <input type="submit" value="Register" class="btn btn-primary btn-block py-3">
+                                <input type="submit" value="Rent" class="btn btn-primary btn-block py-3">
+                            </div>
+                            <div class="mb-3 mb-md-0 col-md-12 mt-3">
+
+                                <input type="checkbox" required> I have read and understood the policy.
                             </div>
                         </div>
                     </form>
@@ -161,6 +146,35 @@
 <script src="${pageContext.request.contextPath}/js/aos.js"></script>
 
 <script src="${pageContext.request.contextPath}/js/main.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const pickUpDate = document.querySelector("input[name='pickUpDate']");
+        const returnDate = document.querySelector("input[name='returnDate']");
+        const totalPrice = document.getElementById("totalPrice");
+        const hiddenTotalPrice = document.getElementById("hiddenTotalPrice");
+
+        // Lấy giá trị thuê xe từ data attribute (tránh lỗi JSTL)
+        const rentPrice = parseInt(totalPrice.dataset.rentPrice);
+
+        function calculateTotal() {
+            const startDate = new Date(pickUpDate.value);
+            const endDate = new Date(returnDate.value);
+
+            if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
+                const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24); // Tính số ngày thuê
+                const total = rentPrice * diffDays; // Nhân với giá thuê mỗi ngày
+                totalPrice.value = total;
+                hiddenTotalPrice.value = total; // Đảm bảo gửi lên form
+            } else {
+                totalPrice.value = rentPrice;
+                hiddenTotalPrice.value = rentPrice;
+            }
+        }
+
+        pickUpDate.addEventListener("change", calculateTotal);
+        returnDate.addEventListener("change", calculateTotal);
+    });
+</script>
 
 </body>
 
