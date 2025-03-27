@@ -22,7 +22,7 @@ public class CarRental {
     LocalDate pickupDate;
     LocalDate returnDate;
     int rentPrice;
-    RentalStatus status;
+    RentalStatus status = RentalStatus.WAITING;
 
     @ManyToOne(fetch = FetchType.LAZY)
     Car car;

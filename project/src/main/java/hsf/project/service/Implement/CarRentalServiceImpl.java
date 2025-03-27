@@ -15,6 +15,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @Service
@@ -23,7 +25,7 @@ import java.util.List;
 public class CarRentalServiceImpl {
     CarRentalRepository carRentalRepository;
     CarRepository carRepository;
-    CarProducerRepository carProducerRepository;
+
 
     public CarRental getCarRentalById(int id) {
         CarRental carRental = carRentalRepository.findById(id);
@@ -34,11 +36,17 @@ public class CarRentalServiceImpl {
         List<CarRental> list = carRentalRepository.findAll();
         if (!list.isEmpty()) {
             for (CarRental carRental : list) {
-                if (!carRental.getPickupDate().isBefore(LocalDate.now())) {
+                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
                     carRental.setStatus(RentalStatus.RENTING);
+                    carRental.getCar().setRented(true);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
                 }
                 if (carRental.getReturnDate().isBefore(LocalDate.now())) {
                     carRental.setStatus(RentalStatus.COMPLETED);
+                    carRental.getCar().setRented(false);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
                 }
             }
         }
@@ -49,43 +57,27 @@ public class CarRentalServiceImpl {
         List<CarRental> list = carRentalRepository.findByCustomer(customer);
         if (!list.isEmpty()) {
             for (CarRental carRental : list) {
-                if (!carRental.getPickupDate().isBefore(LocalDate.now())) {
+                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
                     carRental.setStatus(RentalStatus.RENTING);
+                    carRental.getCar().setRented(true);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
                 }
                 if (carRental.getReturnDate().isBefore(LocalDate.now())) {
                     carRental.setStatus(RentalStatus.COMPLETED);
+                    carRental.getCar().setRented(false);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
                 }
             }
         }
         return list;
     }
 
-    public List<CarRental> getAllByCar(Car car) {
-        return carRentalRepository.findByCar(car);
-    }
 
-    public List<CarRental> getAllByPickupDateBetween(LocalDate startDate, LocalDate endDate) {
-        return carRentalRepository.findByPickupDateBetween(startDate, endDate);
-    }
-
-    public List<CarRental> getAllByReturnDateBetween(LocalDate startDate, LocalDate endDate) {
-        return carRentalRepository.findByReturnDateBetween(startDate, endDate);
-    }
-
-    public List<CarRental> getAllByRentPriceBetween(int startPrice, int endPrice) {
-        return carRentalRepository.findByRentPriceBetween(startPrice, endPrice);
-    }
-
-    public List<CarRental> getAllByPickupAndReturnDateBetween(LocalDate startDate, LocalDate endDate) {
-        return carRentalRepository.findByPickupDateAfterAndReturnDateBefore(startDate, endDate);
-    }
 
     public List<CarRental> getAllByRentStatus(RentalStatus status) {
         return carRentalRepository.findByStatus(status);
-    }
-
-    public List<CarRental> getAllByProducer(CarProducer carProducer) {
-        return carRentalRepository.findByCarProducer(carProducer);
     }
 
     @Transactional
@@ -98,22 +90,27 @@ public class CarRentalServiceImpl {
                 .customer(customer)
                 .car(car)
                 .build();
-        System.out.println(carRental.getCustomer().getCustomerName());
+        if (pickupDate.equals(LocalDate.now())) {
+            car.setRented(true);
+            carRepository.save(car);
+        }
         return carRentalRepository.save(carRental);
     }
 
     @Transactional
-    public void updateCarRental(int id, LocalDate returnDate, int price, Car car) {
+    public void updateCarRental(int id, LocalDate returnDate) {
         CarRental carRental = getCarRentalById(id);
+        int price = carRental.getCar().getRentPrice()*(int) ChronoUnit.DAYS.between(carRental.getPickupDate(), returnDate);
         carRental.setReturnDate(returnDate);
         carRental.setRentPrice(price);
-        carRental.setCar(car);
+        if (returnDate.equals(LocalDate.now())) {
+            updateStatus(carRental, RentalStatus.COMPLETED);
+        }
         carRentalRepository.save(carRental);
     }
 
     @Transactional
-    public void updateStatus(int id, RentalStatus status) {
-        CarRental carRental = getCarRentalById(id);
+    public void updateStatus(CarRental carRental, RentalStatus status) {
         Car car = carRental.getCar();
         carRental.setStatus(status);
         if (carRental.getStatus() == RentalStatus.RENTING) {

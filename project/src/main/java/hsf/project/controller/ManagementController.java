@@ -2,8 +2,10 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Car;
 import hsf.project.pojo.CarProducer;
+import hsf.project.pojo.CarRental;
 import hsf.project.pojo.Customer;
 import hsf.project.service.Implement.CarProducerServiceImpl;
+import hsf.project.service.Implement.CarRentalServiceImpl;
 import hsf.project.service.Implement.CarServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
@@ -26,6 +28,7 @@ import java.util.List;
 public class ManagementController {
     CarProducerServiceImpl carProducerService;
     CarServiceImpl carService;
+    CarRentalServiceImpl carRentalService;
 
     @GetMapping
     public String management(HttpSession session) {
@@ -130,6 +133,20 @@ public class ManagementController {
             }
         }
         carService.deleteCar(id);
+        return "redirect:/management";
+    }
+
+    @PostMapping("/rent/update")
+    public String userReturn(int id, HttpSession session, LocalDate returnDate) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        } else {
+            if (!customer.getAccount().getRole().equalsIgnoreCase("ADMIN")) {
+                return "redirect:/login";
+            }
+        }
+        carRentalService.updateCarRental(id, returnDate);
         return "redirect:/management";
     }
 }

@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>CarRental &mdash; Free Website Template by Colorlib</title>
+    <title>FUCarRentingSystem &mdash;</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -49,7 +49,6 @@
                 <ul class="site-menu main-menu js-clone-nav ml-auto ">
                   <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
-                  <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
                   <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                   <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
@@ -90,7 +89,7 @@
               <c:forEach items="${carRentalList}" var="carRental">
                 <div class="col-md-12">
                   <label>Rent #${carRental.id}</label>
-                  <button type="button" class="form-control btn-white" data-toggle="modal" data-target="#detailModal_${carRental.id}"></button>
+                  <button type="button" class="form-control btn-white" data-toggle="modal" data-target="#detailModal_${carRental.id}"><strong>${carRental.status}</strong></button>
                 </div>
               </c:forEach>
             </div>
@@ -206,7 +205,6 @@
                   <span aria-hidden="true">&times;</span>
                 </button>
               </div>
-              <form action="/user/changePassword" method="post" enctype="multipart/form-data">
                 <div class="modal-body">
                   <div class="">
                     <div class="listing d-block  align-items-stretch">
@@ -247,14 +245,16 @@
                             <span class="number">${carRental.returnDate}</span>
                           </div>
                         </div>
+                        <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                          <div class="listing-feature pr-4">
+                            <span class="caption">Status:</span>
+                            <span class="number">${carRental.status}</span>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-                <div class="modal-footer">
-                  <button type="submit" class="btn btn-primary bg3">Save Changes</button>
-                </div>
-              </form>
             </div>
           </div>
         </div>

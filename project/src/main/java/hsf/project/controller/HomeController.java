@@ -59,11 +59,18 @@ public class HomeController {
     public String listing(HttpSession session) {
         LocalDate from = (LocalDate) session.getAttribute("from");
         LocalDate to = (LocalDate) session.getAttribute("to");
+        if (from == null) {
+            from = LocalDate.now();
+        }
+        if (to == null) {
+            to = LocalDate.now().plusDays(1);
+        }
         List<Car> carList = carService.getAllCarsAvailableBetween(from, to);
         session.setAttribute("carList", carList);
         session.setAttribute("listInit", carList);
         List<CarProducer> carProducerList = carProducerService.getAllCarProducers();
         session.setAttribute("carProducerList", carProducerList);
+        System.out.println("From: " + from+" To: " + to);
         return "listing";
     }
 
@@ -83,7 +90,11 @@ public class HomeController {
         if (newCustomer != null) {
             session.setAttribute("customer", newCustomer);
         }
+
         List<CarRental> carRentalList = carRentalService.getAllByCustomer(newCustomer);
+        for (CarRental carRental : carRentalList) {
+            System.out.println(carRental.getCar().getCarName() +" - "+carRental.getId()+" - "+carRental.getPickupDate()+" - "+carRental.getReturnDate()+" - "+carRental.getStatus());
+        }
         session.setAttribute("carRentalList", carRentalList);
         return "profile";
     }

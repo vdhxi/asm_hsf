@@ -16,10 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -40,11 +37,27 @@ public class CarServiceImpl {
 
     //Most important list for to operate filter
     public List<Car> getAllCarsAvailableBetween(LocalDate from, LocalDate to) {
-        List<CarRental> carRentalList = carRentalRepository.findByPickupDateAfterAndReturnDateBefore(from, to);
+        List<CarRental> carPickupList = new ArrayList<>(carRentalRepository.findByPickupDateBetween(from, to));
+        List<CarRental> carReturnList = new ArrayList<>(carRentalRepository.findByReturnDateBetween(from, to));
+        Set<CarRental> carRentals = new HashSet<>(carPickupList);
+        carRentals.addAll(carReturnList);
+        List<CarRental> carRentalList = new ArrayList<>(carRentals);
         List<Car> carList = new ArrayList<>(carRepository.findAll());
         List<Car> carsRented = new ArrayList<>();
         if (!carRentalList.isEmpty()) {
             for (CarRental carRental : carRentalList) {
+                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.RENTING);
+                    carRental.getCar().setRented(true);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
+                }
+                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
+                    carRental.setStatus(RentalStatus.COMPLETED);
+                    carRental.getCar().setRented(false);
+                    carRentalRepository.save(carRental);
+                    carRepository.save(carRental.getCar());
+                }
                 if (carRental.getStatus() != RentalStatus.COMPLETED) {
                     carsRented.add(carRental.getCar());
                 }
@@ -58,7 +71,6 @@ public class CarServiceImpl {
         List<Car> carsAllow = new ArrayList<>();
         if (!carList.isEmpty()) {
             for (Car car : carList) {
-                System.out.println(car.getCarName());
                 if (car.getProducer().getId() == id) {
                     carsAllow.add(car);
                 }

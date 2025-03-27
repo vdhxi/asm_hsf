@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>CarRental &mdash; Free Website Template by Colorlib</title>
+    <title>FUCarRentingSystem &mdash;</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -45,9 +45,6 @@
                         <ul class="site-menu main-menu js-clone-nav ml-auto ">
                             <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                             <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
-                            <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
-                            <li><a href="${pageContext.request.contextPath}/contact" class="nav-link">Contact</a></li>
-                            <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                         </ul>
                     </nav>
                 </div>
