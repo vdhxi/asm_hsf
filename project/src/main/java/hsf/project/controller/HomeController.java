@@ -1,13 +1,7 @@
 package hsf.project.controller;
 
-import hsf.project.pojo.Car;
-import hsf.project.pojo.CarProducer;
-import hsf.project.pojo.CarRental;
-import hsf.project.pojo.Customer;
-import hsf.project.service.Implement.CarProducerServiceImpl;
-import hsf.project.service.Implement.CarRentalServiceImpl;
-import hsf.project.service.Implement.CarServiceImpl;
-import hsf.project.service.Implement.CustomerServiceImpl;
+import hsf.project.pojo.*;
+import hsf.project.service.Implement.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +22,15 @@ public class HomeController {
     CarServiceImpl carService;
     CustomerServiceImpl customerService;
     CarRentalServiceImpl carRentalService;
+    ReviewServiceImpl reviewService;
 
     @GetMapping("/")
     public String home(HttpSession session) {
         List<CarProducer> carProducerList = carProducerService.getAllCarProducers();
         session.setAttribute("carProducerList", carProducerList);
+        List<Review> reviewList = reviewService.getAllReviews();
+        List<Review> limitedReviews = reviewList.subList(0, Math.min(6, reviewList.size()));
+        session.setAttribute("reviewList", limitedReviews);
         return "home";
     }
 
@@ -40,6 +38,8 @@ public class HomeController {
     public String homeReturn(HttpSession session) {
         List<CarProducer> carProducerList = carProducerService.getAllCarProducers();
         session.setAttribute("carProducerList", carProducerList);
+        List<Review> reviewList = reviewService.getAllReviews();
+        session.setAttribute("reviewList", reviewList);
         return "home";
     }
 
@@ -47,6 +47,9 @@ public class HomeController {
     public String detail(@PathVariable int id, HttpSession session) {
         Car car = carService.findCarById(id);
         session.setAttribute("car", car);
+        List<Review> reviewList = reviewService.getReviewsByCar(car);
+        List<Review> limitedReviews = reviewList.subList(0, Math.min(3, reviewList.size()));
+        session.setAttribute("reviewList", limitedReviews);
         return "detail";
     }
 
@@ -63,20 +66,14 @@ public class HomeController {
             from = LocalDate.now();
         }
         if (to == null) {
-            to = LocalDate.now().plusDays(1);
+            to = LocalDate.now();
         }
         List<Car> carList = carService.getAllCarsAvailableBetween(from, to);
         session.setAttribute("carList", carList);
         session.setAttribute("listInit", carList);
         List<CarProducer> carProducerList = carProducerService.getAllCarProducers();
         session.setAttribute("carProducerList", carProducerList);
-        System.out.println("From: " + from+" To: " + to);
         return "listing";
-    }
-
-    @GetMapping("/review")
-    public String review() {
-        return "review";
     }
 
     @GetMapping("/profile")

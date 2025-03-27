@@ -20,19 +20,19 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    String carName; //1
-    int carModelYear; //2
-    String color; //3
-    int capacity; //4
-    String description; //5
-    LocalDate importDate; //6
+    String carName;
+    int carModelYear;
+    String color;
+    int capacity;
+    String description;
+    LocalDate importDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonBackReference
-    CarProducer producer; //7
+    CarProducer producer;
 
-    String url; //8
-    int rentPrice; //9
+    String url;
+    int rentPrice;
     boolean isRented;
 
     @OneToMany(mappedBy = "car")

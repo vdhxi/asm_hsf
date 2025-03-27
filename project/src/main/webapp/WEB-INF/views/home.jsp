@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem &mdash;</title>
+    <title>FUCarRentingSystem</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -34,7 +34,7 @@
 
             <div class="col-3">
               <div class="site-logo">
-                <a href="${pageContext.request.contextPath}/home"><strong>CarRental</strong></a>
+                <a href="${pageContext.request.contextPath}/home"><strong>FUCarRentingSystem</strong></a>
               </div>
             </div>
 
@@ -46,7 +46,6 @@
                 <ul class="site-menu main-menu js-clone-nav ml-auto ">
                   <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
-                  <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
                   <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
                   <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
@@ -114,55 +113,28 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-7">
-            <h2 class="section-heading"><strong>Car Listings</strong></h2>
-            <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>    
+            <h2 class="section-heading"><strong>Review</strong></h2>
+            <p class="mb-5">From customers who have experienced our services.</p>
           </div>
         </div>
 
 
         <div class="row">
-          <div class="col-lg-4 mb-4">
-            <div class="testimonial-2">
-              <blockquote class="mb-4">
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, deserunt eveniet veniam. Ipsam, nam, voluptatum"</p>
-              </blockquote>
-              <div class="d-flex v-card align-items-center">
-                <img src="images/person_1.jpg" alt="Image" class="img-fluid mr-3">
-                <div class="author-name">
-                  <span class="d-block">Mike Fisher</span>
-                  <span>Owner, Ford</span>
+          <c:forEach items="${reviewList}" var="review">
+            <div class="col-lg-4 mb-4">
+              <div class="testimonial-2">
+                <div class="d-flex v-card align-items-center">
+                  <div class="author-name">
+                    <span class="d-block"><strong>${review.customer.customerName}</strong></span>
+                    <a href="/detail/${review.car.id}">${review.car.carName}</a>
+                  </div>
                 </div>
+                <blockquote class="mb-4">
+                  <p>${review.comment}</p>
+                </blockquote>
               </div>
             </div>
-          </div>
-          <div class="col-lg-4 mb-4">
-            <div class="testimonial-2">
-              <blockquote class="mb-4">
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, deserunt eveniet veniam. Ipsam, nam, voluptatum"</p>
-              </blockquote>
-              <div class="d-flex v-card align-items-center">
-                <img src="images/person_2.jpg" alt="Image" class="img-fluid mr-3">
-                <div class="author-name">
-                  <span class="d-block">Jean Stanley</span>
-                  <span>Traveler</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="col-lg-4 mb-4">
-            <div class="testimonial-2">
-              <blockquote class="mb-4">
-                <p>"Lorem ipsum dolor sit amet, consectetur adipisicing elit. Voluptatem, deserunt eveniet veniam. Ipsam, nam, voluptatum"</p>
-              </blockquote>
-              <div class="d-flex v-card align-items-center">
-                <img src="images/person_3.jpg" alt="Image" class="img-fluid mr-3">
-                <div class="author-name">
-                  <span class="d-block">Katie Rose</span>
-                  <span >Customer</span>
-                </div>
-              </div>
-            </div>
-          </div>
+          </c:forEach>
         </div>
       </div>
     </div>

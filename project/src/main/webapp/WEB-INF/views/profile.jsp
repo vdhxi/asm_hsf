@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem &mdash;</title>
+    <title>FUCarRentingSystem</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -37,7 +37,7 @@
 
             <div class="col-3">
               <div class="site-logo">
-                <a href="${pageContext.request.contextPath}/home"><strong>CarRental</strong></a>
+                <a href="${pageContext.request.contextPath}/home"><strong>FUCarRentingSystem</strong></a>
               </div>
             </div>
 
@@ -68,8 +68,7 @@
             <div class="col-lg-5">
 
               <div class="intro">
-                <h1><strong>Contact</strong></h1>
-                <div class="custom-breadcrumbs"><a href="${pageContext.request.contextPath}/home.jsp">Home</a> <span class="mx-2">/</span> <strong>Contact</strong></div>
+                <h1><strong>My profile</strong></h1>
               </div>
 
             </div>
@@ -86,12 +85,34 @@
         <div class="row">
           <div class="col-lg-8 mb-5" >
             <div class="form-group row">
-              <c:forEach items="${carRentalList}" var="carRental">
-                <div class="col-md-12">
-                  <label>Rent #${carRental.id}</label>
-                  <button type="button" class="form-control btn-white" data-toggle="modal" data-target="#detailModal_${carRental.id}"><strong>${carRental.status}</strong></button>
-                </div>
-              </c:forEach>
+              <table class="table table-striped table-hover">
+                <thead class="thead-light">
+                <tr>
+                  <th scope="col">ID</th>
+                  <th scope="col">Status</th>
+                  <th scope="col" class="text-center"></th>
+                </tr>
+                </thead>
+                <tbody>
+                <c:forEach items="${carRentalList}" var="carRental">
+                  <tr>
+                    <td>#${carRental.id}</td>
+                    <td><strong>${carRental.status}</strong></td>
+                    <td class="text-center">
+                      <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#detailModal_${carRental.id}">
+                        View detail
+                      </button>
+                      <c:if test="${carRental.status == 'COMPLETED'}">
+                        <button type="button" class="btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#reviewModal_${carRental.id}">
+                          Review
+                        </button>
+                      </c:if>
+                    </td>
+                  </tr>
+                </c:forEach>
+                </tbody>
+              </table>
+
             </div>
           </div>
 
@@ -199,7 +220,7 @@
         <div class="modal fade" id="detailModal_${carRental.id}" tabindex="-1" role="dialog" aria-hidden="true">
           <div class="modal-dialog modal-lg col-md-6 col-lg-6 mb-4" role="document">
             <div class="modal-content col-md-6 col-lg-8 mb-4">
-              <div class="modal-header bg3">
+              <div class="modal-header bg3 mb-3">
                 <h5 class="modal-title text-black">Rent Detail</h5>
                 <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
                   <span aria-hidden="true">&times;</span>
@@ -209,7 +230,7 @@
                   <div class="">
                     <div class="listing d-block  align-items-stretch">
                       <div class="listing-img h-100 mr-4">
-                        <img src="${carRental.car.url}?timestamp=${System.currentTimeMillis()}" alt="Image" class="img-fluid" style="width: 300px; height: 200px">
+                        <img src="${carRental.car.url}" alt="Image" class="img-fluid" style="width: 300px; height: 200px">
                       </div>
                       <div class="listing-contents h-100">
                         <h2><strong>${carRental.car.carName}</strong></h2>
@@ -255,6 +276,52 @@
                     </div>
                   </div>
                 </div>
+            </div>
+          </div>
+        </div>
+      </c:forEach>
+      <!-- Review modal-->
+      <c:forEach items="${carRentalList}" var="carRental">
+        <div class="modal fade" id="reviewModal_${carRental.id}" tabindex="-1" role="dialog" aria-hidden="true">
+          <div class="modal-dialog modal-lg col-md-6 col-lg-6 mb-4" role="document">
+            <div class="modal-content col-md-6 col-lg-8 mb-4">
+              <div class="modal-header bg3 mb-3">
+                <h5 class="modal-title text-black">Rent Detail</h5>
+                <button type="button" class="close text-black" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true">&times;</span>
+                </button>
+              </div>
+
+
+              <div class="modal-body">
+                <div>
+                  <div class="listing d-block  align-items-stretch">
+                    <div class="listing-img h-100 mr-4">
+                      <img src="${carRental.car.url}" alt="Image" class="img-fluid" style="width: 300px; height: 200px">
+                    </div>
+                    <div class="listing-contents h-100">
+                      <form action="/user/review" method="post">
+                        <h2><strong>${carRental.car.carName}</strong></h2>
+                        <h4>${carRental.car.producer.producerName}</h4>
+                        <div class="form-group">
+                          Rating
+                          <div class="form-control-wrap">
+                            <input type="text" name="rating" class="form-control" required>
+                          </div>
+                        </div>
+                        <div class="form-group">
+                          <label>Comment</label>
+                          <textarea class="form-control" name="comment" rows="4"></textarea>
+                        </div>
+                        <div class="d-block d-md-flex mb-3 border-bottom pb-3">
+                          <button class="btn-block btn btn-outline-primary" type="submit">Post</button>
+                          <input type="hidden" name="id" value="${carRental.car.id}">
+                        </div>
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

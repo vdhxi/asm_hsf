@@ -3,7 +3,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>FUCarRentingSystem &mdash;</title>
+  <title>FUCarRentingSystem</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -33,7 +33,7 @@
 
         <div class="col-3">
           <div class="site-logo">
-            <a href="${pageContext.request.contextPath}/home"><strong>CarRental</strong></a>
+            <a href="${pageContext.request.contextPath}/home"><strong>FUCarRentingSystem</strong></a>
           </div>
         </div>
 
@@ -45,7 +45,6 @@
             <ul class="site-menu main-menu js-clone-nav ml-auto ">
               <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
               <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
-              <li><a href="${pageContext.request.contextPath}/review" class="nav-link">Reviews</a></li>
               <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
               <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
               <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
@@ -68,7 +67,6 @@
 
           <div class="intro">
             <h1><strong>Listings</strong></h1>
-            <div class="custom-breadcrumbs"><a href="index.html">Home</a> <span class="mx-2">/</span> <strong>Listings</strong></div>
           </div>
 
         </div>
@@ -79,10 +77,30 @@
   <!-- Listing section -->
   <div class="site-section bg-light">
     <div class="container">
-      <div class="row">
+      <div class="row d-flex">
         <div class="col-lg-7">
           <h2 class="section-heading"><strong>Car Listings</strong></h2>
-          <p class="mb-5">Lorem ipsum dolor sit amet, consectetur adipisicing elit.</p>
+          <p class="mb-5">Let find the car you want.</p>
+        </div>
+        <div class="col-lg-5 d-flex">
+          <form class="col-md-12 d-flex" action="/search" method="get">
+            <div class="mb-3 mb-md-0 col-md-5">
+              <div class="form-control-wrap">
+                <input type="text" name="from" placeholder="Pick up" class="form-control datepicker px-3">
+              </div>
+            </div>
+            <div class="mb-3 mb-md-0 col-md-5">
+              <div class="form-control-wrap">
+                <input type="text" name="to" placeholder="Drop off" class="form-control datepicker px-3">
+              </div>
+            </div>
+            <div class="mb-3 mb-md-0 col-md-2">
+              <button type="submit" class="btn btn-block">
+                <i class="icon icon-search"></i>
+                <input type="hidden" name="id" value="0">
+              </button>
+            </div>
+          </form>
         </div>
       </div>
       <div class="row mb-5">

@@ -28,7 +28,7 @@ public class SearchController {
     @GetMapping()
     public String search(HttpSession session,
                          @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}")  @DateTimeFormat(pattern = "MM/dd/yyyy") LocalDate from,
-                         @RequestParam(defaultValue = "#{T(java.time.LocalDate).now().plusDays(1)}") @DateTimeFormat(pattern = "MM/dd/yyyy") LocalDate to,
+                         @RequestParam(defaultValue = "#{T(java.time.LocalDate).now()}") @DateTimeFormat(pattern = "MM/dd/yyyy") LocalDate to,
                          @RequestParam(defaultValue = "0") int id) {
         List<Car> carList = carService.getAllCarsAvailableBetween(from, to);
         session.setAttribute("listInit", carList);

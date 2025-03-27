@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem &mdash;</title>
+    <title>FUCarRentingSystem</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -37,7 +37,7 @@
 
             <div class="col-3">
               <div class="site-logo">
-                <a href="${pageContext.request.contextPath}/home"><strong>CarRental</strong></a>
+                <a href="${pageContext.request.contextPath}/home"><strong>FUCarRentingSystem</strong></a>
               </div>
             </div>
 

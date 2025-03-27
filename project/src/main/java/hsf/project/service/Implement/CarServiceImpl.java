@@ -35,6 +35,7 @@ public class CarServiceImpl {
         return carRepository.findAll();
     }
 
+    @Transactional
     //Most important list for to operate filter
     public List<Car> getAllCarsAvailableBetween(LocalDate from, LocalDate to) {
         List<CarRental> carPickupList = new ArrayList<>(carRentalRepository.findByPickupDateBetween(from, to));
@@ -64,6 +65,7 @@ public class CarServiceImpl {
             }
         }
         carList.removeAll(carsRented);
+        carList.retainAll(getAllCarsAvailable());
         return carList;
     }
 
