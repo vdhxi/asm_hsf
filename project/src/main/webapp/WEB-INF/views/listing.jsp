@@ -82,7 +82,7 @@
           <h2 class="section-heading"><strong>Car Listings</strong></h2>
           <p class="mb-5">Let find the car you want.</p>
         </div>
-        <div class="col-lg-5 d-flex">
+        <div class="col-lg-5 d-flex  align-content-center">
           <form class="col-md-12 d-flex" action="/search" method="get">
             <div class="mb-3 mb-md-0 col-md-5">
               <div class="form-control-wrap">
@@ -116,10 +116,15 @@
         <!-- Price -->
         <div class="col-md-4">
           <h5 class="fw-bold">Price</h5>
-            <form action="/search/price">
-              <input class="col-md-2" type="text" name="min"> -
-              <input class="col-md-2" type="text" name="max">
-              <input type="submit" class="btn btn-sm" value="Search">
+            <form action="/search/price" class="d-flex">
+              <input class="form-control col-md-4" type="text" name="min">
+              <input class="form-control col-md-4" type="text" name="max">
+              <div class="mb-3 mb-md-0 col-md-2 align-content-center">
+                <button type="submit" class="btn btn-block">
+                  <i class="icon icon-search"></i>
+                  <input type="hidden" name="id" value="0">
+                </button>
+              </div>
             </form>
         </div>
 
