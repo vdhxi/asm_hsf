@@ -47,6 +47,32 @@ public class ManagementController {
         return "management";
     }
 
+    @GetMapping("/rental")
+    public String rental(HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        } else {
+            if (!customer.getAccount().getRole().equalsIgnoreCase("ADMIN")) {
+                return "redirect:/home";
+            }
+        }
+        return "rentalManagement";
+    }
+
+    @GetMapping("/user")
+    public String user(HttpSession session) {
+        Customer customer = (Customer) session.getAttribute("customer");
+        if (customer == null) {
+            return "redirect:/login";
+        } else {
+            if (!customer.getAccount().getRole().equalsIgnoreCase("ADMIN")) {
+                return "redirect:/home";
+            }
+        }
+        return "userManagement";
+    }
+
     @PostMapping("/manufacture/add")
     public String addManufacture(HttpSession session, String name, String address, String country) {
         Customer customer = (Customer) session.getAttribute("customer");
@@ -135,6 +161,8 @@ public class ManagementController {
         carService.deleteCar(id);
         return "redirect:/management";
     }
+
+
 
     @PostMapping("/rent/update")
     public String userReturn(int id, HttpSession session, LocalDate returnDate) {

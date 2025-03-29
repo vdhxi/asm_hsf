@@ -65,7 +65,7 @@
                         </div>
                     </div>
 
-                    <form class="trip-form" action="/user" method="post">
+                    <form class="trip-form" action="/user/add" method="post">
                         <h3><strong>Fill out to start your journey now</strong></h3>
                         <br>
                         <div class="row align-items-center">
