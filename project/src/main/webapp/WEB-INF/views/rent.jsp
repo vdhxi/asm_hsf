@@ -46,8 +46,14 @@
                             <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
                             <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                             <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
-                            <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
-                            <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
+                            <c:choose>
+                                <c:when test="${not empty sessionScope.customer}">
+                                    <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
+                                </c:when>
+                                <c:otherwise>
+                                    <li><a href="${pageContext.request.contextPath}/login" class="nav-link">Login</a></li>
+                                </c:otherwise>
+                            </c:choose>
                         </ul>
                     </nav>
                 </div>
@@ -160,7 +166,10 @@
             const endDate = new Date(returnDate.value);
 
             if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-                const diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24); // Tính số ngày thuê
+                let diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24); // Tính số ngày thuê
+                if (diffDays === 0) {
+                    diffDays = 1
+                }
                 const total = rentPrice * diffDays; // Nhân với giá thuê mỗi ngày
                 totalPrice.value = total;
                 hiddenTotalPrice.value = total; // Đảm bảo gửi lên form

@@ -51,7 +51,14 @@
                   <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
                   <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
                   <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
-                  <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
+                  <c:choose>
+                    <c:when test="${not empty sessionScope.customer}">
+                      <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
+                    </c:when>
+                    <c:otherwise>
+                      <li><a href="${pageContext.request.contextPath}/login" class="nav-link">Login</a></li>
+                    </c:otherwise>
+                  </c:choose>
                 </ul>
               </nav>
             </div>
