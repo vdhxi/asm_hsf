@@ -2,6 +2,7 @@ package hsf.project.service.Implement;
 
 import hsf.project.pojo.CarProducer;
 import hsf.project.repository.CarProducerRepository;
+import hsf.project.service.CarProducerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -13,7 +14,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CarProducerServiceImpl {
+public class CarProducerServiceImpl implements CarProducerService {
     CarProducerRepository carProducerRepository;
 
     public CarProducer getCarProducer(int id) {
@@ -29,13 +30,13 @@ public class CarProducerServiceImpl {
     }
 
     @Transactional
-    public CarProducer saveCarProducer(String producerName, String address, String country) {
+    public void saveCarProducer(String producerName, String address, String country) {
         CarProducer carProducer = CarProducer.builder()
                 .producerName(producerName)
                 .address(address)
                 .country(country)
                 .build();
-        return carProducerRepository.save(carProducer);
+        carProducerRepository.save(carProducer);
     }
 
     @Transactional

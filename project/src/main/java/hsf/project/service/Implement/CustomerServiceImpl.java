@@ -3,6 +3,8 @@ package hsf.project.service.Implement;
 import hsf.project.pojo.Account;
 import hsf.project.pojo.Customer;
 import hsf.project.repository.CustomerRepository;
+import hsf.project.service.AccountService;
+import hsf.project.service.CustomerService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -14,9 +16,9 @@ import java.time.LocalDate;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CustomerServiceImpl {
+public class CustomerServiceImpl implements CustomerService {
     CustomerRepository customerRepository;
-    AccoutServiceImpl accoutService;
+    AccountService accountService;
 
     public Customer login(String email) {
         return customerRepository.findCustomerByEmail(email);
@@ -48,7 +50,7 @@ public class CustomerServiceImpl {
                 .accountName(customer.getCustomerName())
                 .role("CUSTOMER")
                 .build();
-        accoutService.createAccount(account);
+        accountService.createAccount(account);
     }
 
     @Transactional

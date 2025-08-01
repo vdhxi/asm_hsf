@@ -2,6 +2,7 @@ package hsf.project.service.Implement;
 
 import hsf.project.pojo.Account;
 import hsf.project.repository.AccountRepository;
+import hsf.project.service.AccountService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -11,14 +12,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class AccoutServiceImpl {
+public class AccountServiceImpl implements AccountService {
     AccountRepository accountRepository;
 
     @Transactional
     public void createAccount(Account account) {
         accountRepository.save(account);
     }
-
-
 
 }

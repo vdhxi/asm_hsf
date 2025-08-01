@@ -2,9 +2,9 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Car;
 import hsf.project.pojo.Customer;
-import hsf.project.service.Implement.CarServiceImpl;
-import hsf.project.service.Implement.CustomerServiceImpl;
-import hsf.project.service.Implement.ReviewServiceImpl;
+import hsf.project.service.CarService;
+import hsf.project.service.CustomerService;
+import hsf.project.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -20,9 +20,9 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/user")
 public class UserController {
-    CustomerServiceImpl customerService;
-    ReviewServiceImpl reviewService;
-    CarServiceImpl carService;
+    CustomerService customerService;
+    ReviewService reviewService;
+    CarService carService;
 
     @PostMapping("/add")
     public String addUser(String name, String mobile, String email, String password, LocalDate birthday, LocalDate licenceDate, String identity, String licenceNumber) {

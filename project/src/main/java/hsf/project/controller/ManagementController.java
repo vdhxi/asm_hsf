@@ -2,11 +2,10 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Car;
 import hsf.project.pojo.CarProducer;
-import hsf.project.pojo.CarRental;
 import hsf.project.pojo.Customer;
-import hsf.project.service.Implement.CarProducerServiceImpl;
-import hsf.project.service.Implement.CarRentalServiceImpl;
-import hsf.project.service.Implement.CarServiceImpl;
+import hsf.project.service.CarProducerService;
+import hsf.project.service.CarRentalService;
+import hsf.project.service.CarService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +25,9 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/management")
 public class ManagementController {
-    CarProducerServiceImpl carProducerService;
-    CarServiceImpl carService;
-    CarRentalServiceImpl carRentalService;
+    CarProducerService carProducerService;
+    CarService carService;
+    CarRentalService carRentalService;
 
     @GetMapping
     public String management(HttpSession session) {

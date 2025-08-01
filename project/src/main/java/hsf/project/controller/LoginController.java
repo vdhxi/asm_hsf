@@ -1,6 +1,7 @@
 package hsf.project.controller;
 
 import hsf.project.pojo.Customer;
+import hsf.project.service.CustomerService;
 import hsf.project.service.Implement.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class LoginController {
 
-    CustomerServiceImpl customerService;
+    CustomerService customerService;
 
     @GetMapping("/login")
     public String login(HttpSession session) {

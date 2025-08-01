@@ -4,6 +4,7 @@ import hsf.project.pojo.Car;
 import hsf.project.pojo.Customer;
 import hsf.project.pojo.Review;
 import hsf.project.repository.ReviewRepository;
+import hsf.project.service.ReviewService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -15,7 +16,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class ReviewServiceImpl {
+public class ReviewServiceImpl implements ReviewService {
     ReviewRepository reviewRepository;
 
     public Review getReviewById(int id) {
@@ -35,14 +36,14 @@ public class ReviewServiceImpl {
     }
 
     @Transactional
-    public Review createReview(String comment, int rating, Customer customer, Car car) {
+    public void createReview(String comment, int rating, Customer customer, Car car) {
         Review review = Review.builder()
                 .comment(comment)
                 .reviewStar(rating)
                 .customer(customer)
                 .car(car)
                 .build();
-        return reviewRepository.save(review);
+        reviewRepository.save(review);
     }
 
     @Transactional

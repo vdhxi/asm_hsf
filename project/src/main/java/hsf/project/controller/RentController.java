@@ -2,8 +2,8 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Car;
 import hsf.project.pojo.Customer;
-import hsf.project.service.Implement.CarRentalServiceImpl;
-import hsf.project.service.Implement.CarServiceImpl;
+import hsf.project.service.CarRentalService;
+import hsf.project.service.CarService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -19,8 +19,8 @@ import java.time.LocalDate;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/rent")
 public class RentController {
-    CarServiceImpl carService;
-    CarRentalServiceImpl carRentalService;
+    CarService carService;
+    CarRentalService carRentalService;
 
     @PostMapping()
     public String rent(int id, HttpSession session) {

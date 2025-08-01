@@ -1,6 +1,7 @@
 package hsf.project.service.Implement;
 
 import hsf.project.config.SupabaseConfig;
+import hsf.project.service.SupabaseService;
 import lombok.RequiredArgsConstructor;
 import okhttp3.*;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,7 @@ import java.io.IOException;
 
 @Service
 @RequiredArgsConstructor
-public class SupabaseService {
+public class SupabaseServiceImpl implements SupabaseService {
     private final OkHttpClient client = new OkHttpClient();
     private final SupabaseConfig config;
 

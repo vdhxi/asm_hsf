@@ -1,7 +1,7 @@
 package hsf.project.controller;
 
 import hsf.project.pojo.*;
-import hsf.project.service.Implement.*;
+import hsf.project.service.*;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -18,11 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class HomeController {
-    CarProducerServiceImpl carProducerService;
-    CarServiceImpl carService;
-    CustomerServiceImpl customerService;
-    CarRentalServiceImpl carRentalService;
-    ReviewServiceImpl reviewService;
+    CarProducerService carProducerService;
+    CarService carService;
+    CustomerService customerService;
+    CarRentalService carRentalService;
+    ReviewService reviewService;
 
     @GetMapping("/")
     public String home(HttpSession session) {

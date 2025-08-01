@@ -2,8 +2,8 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Car;
 import hsf.project.pojo.CarProducer;
-import hsf.project.service.Implement.CarProducerServiceImpl;
-import hsf.project.service.Implement.CarServiceImpl;
+import hsf.project.service.CarProducerService;
+import hsf.project.service.CarService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -22,8 +22,8 @@ import java.util.List;
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 @RequestMapping("/search")
 public class SearchController {
-    CarServiceImpl carService;
-    CarProducerServiceImpl carProducerService;
+    CarService carService;
+    CarProducerService carProducerService;
 
     @GetMapping()
     public String search(HttpSession session,

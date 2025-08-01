@@ -8,6 +8,7 @@ import hsf.project.pojo.Customer;
 import hsf.project.repository.CarProducerRepository;
 import hsf.project.repository.CarRentalRepository;
 import hsf.project.repository.CarRepository;
+import hsf.project.service.CarRentalService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -22,13 +23,12 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CarRentalServiceImpl {
+public class CarRentalServiceImpl implements CarRentalService {
     CarRentalRepository carRentalRepository;
     CarRepository carRepository;
 
 
     public CarRental getCarRentalById(int id) {
-        CarRental carRental = carRentalRepository.findById(id);
         return carRentalRepository.findById(id);
     }
 
@@ -81,7 +81,7 @@ public class CarRentalServiceImpl {
     }
 
     @Transactional
-    public CarRental createCarRental(LocalDate pickupDate, LocalDate returnDate, int price, Customer customer, Car car) {
+    public void createCarRental(LocalDate pickupDate, LocalDate returnDate, int price, Customer customer, Car car) {
         CarRental carRental = CarRental.builder()
                 .pickupDate(pickupDate)
                 .returnDate(returnDate)
@@ -94,7 +94,7 @@ public class CarRentalServiceImpl {
             car.setRented(true);
             carRepository.save(car);
         }
-        return carRentalRepository.save(carRental);
+        carRentalRepository.save(carRental);
     }
 
     @Transactional

@@ -7,6 +7,7 @@ import hsf.project.pojo.CarRental;
 import hsf.project.repository.CarProducerRepository;
 import hsf.project.repository.CarRentalRepository;
 import hsf.project.repository.CarRepository;
+import hsf.project.service.CarService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -21,11 +22,11 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
-public class CarServiceImpl {
+public class CarServiceImpl implements CarService {
     CarRepository carRepository;
     CarProducerRepository carProducerRepository;
     CarRentalRepository carRentalRepository;
-    SupabaseService supabaseService;
+    SupabaseServiceImpl supabaseService;
 
     public Car findCarById(int id) {
         return carRepository.findById(id);
@@ -36,7 +37,6 @@ public class CarServiceImpl {
     }
 
     @Transactional
-    //Most important list for to operate filter
     public List<Car> getAllCarsAvailableBetween(LocalDate from, LocalDate to) {
         List<CarRental> carPickupList = new ArrayList<>(carRentalRepository.findByPickupDateBetween(from, to));
         List<CarRental> carReturnList = new ArrayList<>(carRentalRepository.findByReturnDateBetween(from, to));
