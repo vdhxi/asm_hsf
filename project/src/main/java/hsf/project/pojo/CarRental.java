@@ -24,6 +24,8 @@ public class CarRental {
     int rentPrice;
     RentalStatus status = RentalStatus.WAITING;
 
+    boolean isReviewed;
+
     @ManyToOne(fetch = FetchType.LAZY)
     Car car;
 

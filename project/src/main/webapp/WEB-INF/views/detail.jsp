@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem  - Detail</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -27,7 +27,7 @@
 
 <body>
 <div class="site-wrap" id="home-section">
-    <header class="site-navbar site-navbar-target" role="banner">
+    <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
             <div class="row align-items-center position-relative">
@@ -63,16 +63,12 @@
 
     </header>
 
-    <div class="hero" style="background-image: url('${pageContext.request.contextPath}/images/hero_1_a.jpg');">
+    <div class="hero" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
 
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-10 b">
-                    <div class="row mb-5">
-                        <div class="col-lg-7 intro">
-                            <h1><strong>CarRentDetail</strong></h1>
-                        </div>
-                    </div>
+
                     <div class="trip-form">
                         <div class="row d-flex mb-5">
                             <div class="col-md-6 col-lg-8 p-b-30">

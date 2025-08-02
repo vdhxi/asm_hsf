@@ -24,6 +24,8 @@ public class Car {
     int carModelYear;
     String color;
     int capacity;
+    @Lob
+    @Column(columnDefinition = "NVARCHAR(MAX)")
     String description;
     LocalDate importDate;
 
@@ -34,6 +36,7 @@ public class Car {
     String url;
     int rentPrice;
     boolean isRented;
+    boolean isActive;
 
     @OneToMany(mappedBy = "car")
     List<Review> reviewList;

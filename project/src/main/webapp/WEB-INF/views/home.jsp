@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem - Home</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -27,7 +27,7 @@
 
   <body>
     <div class="site-wrap" id="home-section">
-      <header class="site-navbar site-navbar-target" role="banner">
+      <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
           <div class="row align-items-center position-relative">
@@ -39,8 +39,6 @@
             </div>
 
             <div class="col-9  text-right">
-              
-              <span class="d-inline-block d-lg-none"><a href="#" class=" site-menu-toggle js-menu-toggle py-5 "><span class="icon-menu h3 text-black"></span></a></span>
 
               <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                 <ul class="site-menu main-menu js-clone-nav ml-auto ">
@@ -63,20 +61,20 @@
 
       </header>
 
-      <div class="hero" style="background-image: url('${pageContext.request.contextPath}/images/hero_1_a.jpg');">
+      <div class="hero" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
         
         <div class="container">
           <div class="row align-items-center justify-content-center">
             <div class="col-lg-10">
 
-              <div class="row mb-5">
-                <div class="col-lg-7 intro">
-                  <h1><strong>Rent a car</strong> is within your finger tips.</h1>
-                </div>
-              </div>
+
               
               <form class="trip-form" action="/search" method="get">
-                
+                <div class="row mb-5">
+                  <div class="col-lg-7 intro">
+                    <h1><strong>Rent a car</strong> is within your finger tips.</h1>
+                  </div>
+                </div>
                 <div class="row align-items-center">
                   
                   <div class="mb-3 mb-md-0 col-md-3">

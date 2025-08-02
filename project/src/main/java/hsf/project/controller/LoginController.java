@@ -2,7 +2,6 @@ package hsf.project.controller;
 
 import hsf.project.pojo.Customer;
 import hsf.project.service.CustomerService;
-import hsf.project.service.Implement.CustomerServiceImpl;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;

@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem - Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -26,7 +26,7 @@
 
 <body>
 <div class="site-wrap" id="home-section">
-    <header class="site-navbar site-navbar-target" role="banner">
+    <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
             <div class="row align-items-center position-relative">
@@ -53,17 +53,13 @@
 
     </header>
 
-    <div class="hero" style="background-image: url('${pageContext.request.contextPath}/images/hero_1_a.jpg');">
+    <div class="hero" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
 
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-10">
 
-                    <div class="row mb-5">
-                        <div class="col-lg-7 intro">
-                            <h1><strong>Rent a car</strong> is within your finger tips.</h1>
-                        </div>
-                    </div>
+
 
                     <form class="trip-form" action="/login" method="post">
                         <h3><strong>Login to continue your trip</strong></h3>
@@ -86,6 +82,9 @@
                             <div class="mb-3 mb-md-0 col-md-3">
                                 <a href="/register">Don't have an account? Click here</a>
                             </div>
+                        </div>
+                        <div style="text-align: center; padding: 20px">
+                            <p th:if="${error}" style="align-items: center; color: red">${error}</p>
                         </div>
 
                     </form>

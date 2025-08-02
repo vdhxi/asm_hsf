@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem - Management</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -30,7 +30,7 @@
   <body>
     <div class="site-wrap" id="home-section">
 
-      <header class="site-navbar site-navbar-target" role="banner">
+      <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
           <div class="row align-items-center position-relative">
@@ -47,10 +47,9 @@
 
               <nav class="site-navigation text-right ml-auto d-none d-lg-block" role="navigation">
                 <ul class="site-menu main-menu js-clone-nav ml-auto ">
-                  <li class="active"><a href="${pageContext.request.contextPath}/home" class="nav-link">Home</a></li>
-                  <li><a href="${pageContext.request.contextPath}/listing" class="nav-link">Listing</a></li>
-                  <li><a href="${pageContext.request.contextPath}/profile" class="nav-link">Profile</a></li>
-                  <li><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                  <li class="active"><a href="${pageContext.request.contextPath}/management" class="nav-link">Management</a></li>
+                  <li><a href="/management/rental" class="nav-link">Rental Management</a></li>
+                  <li><a href="/management/user" class="nav-link">User Management</a></li>
                   <c:choose>
                     <c:when test="${not empty sessionScope.customer}">
                       <li><a href="${pageContext.request.contextPath}/logout" class="nav-link">Logout</a></li>
@@ -67,28 +66,24 @@
 
       </header>
 
-      <div class="hero inner-page" style="background-image: url('${pageContext.request.contextPath}images/hero_1_a.jpg');">
-        <div class="container">
-          <div class="row align-items-end">
-            <div class="col-lg-5">
-              <div class="intro">
-                <h1><strong>CAR</strong></h1>
-                <h2> MANAGEMENT</h2>
-              </div>
-            </div>
-          </div>
-        </div>
+      <div class="hero inner-page" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
       </div>
 
       <div class="site-section bg-light">
         <div class="container">
+          <div class="row d-flex">
+            <div class="col-lg-7">
+              <h2 class="section-heading"><strong>CAR MANAGEMENT</strong></h2>
+            </div>
+          </div>
+
           <!-- Statistics Cards -->
           <div class="row mb-5">
             <div class="col-md-3">
               <div class="card bg-light text-white">
                 <div class="card-body">
                   <h5 class="card-title">Total Car Manufacture</h5>
-                  <h2 class="card-text">0</h2>
+                  <h2 class="card-text">${totalCarManufacture}</h2>
                 </div>
               </div>
             </div>
@@ -96,15 +91,15 @@
               <div class="card bg-light text-white">
                 <div class="card-body">
                   <h5 class="card-title">Total Car</h5>
-                  <h2 class="card-text">1</h2>
+                  <h2 class="card-text">${totalCar}</h2>
                 </div>
               </div>
             </div>
             <div class="col-md-3">
               <div class="card bg-light text-white">
                 <div class="card-body">
-                  <h5 class="card-title">Total Rent</h5>
-                  <h2 class="card-text">0</h2>
+                  <h5 class="card-title">Car Renting</h5>
+                  <h2 class="card-text">${totalCarRenting}</h2>
                 </div>
               </div>
             </div>
@@ -112,7 +107,7 @@
               <div class="card bg-light text-white">
                 <div class="card-body">
                   <h5 class="card-title">Car Available</h5>
-                  <h2 class="card-text">0</h2>
+                  <h2 class="card-text">${totalCarAvailable}</h2>
                 </div>
               </div>
             </div>
@@ -133,9 +128,7 @@
                     <thead>
                       <tr>
                         <th>Name</th>
-                        <th>Address</th>
                         <th>Country</th>
-                        <th>Total cars</th>
                         <th></th>
                       </tr>
                     </thead>
@@ -143,9 +136,7 @@
                       <tbody>
                       <tr>
                         <td>${carProducer.producerName}</td>
-                        <td>${carProducer.address}</td>
                         <td>${carProducer.country}</td>
-                        <td>${carProducer.cars.size()}</td>
                         <td>
                           <div class="d-flex col-md-4">
                             <div class="listing-feature pr-4">
@@ -261,10 +252,6 @@
                   <input type="text" name="name" class="form-control" required>
                 </div>
                 <div class="form-group">
-                  <label>Address</label>
-                  <input type="text" name="address" class="form-control" required>
-                </div>
-                <div class="form-group">
                   <label>Country</label>
                   <input type="text" name="country" class="form-control" required>
                 </div>
@@ -295,10 +282,6 @@
                   <div class="form-group">
                     <label>Manufacture Name</label>
                     <input type="text" name="name" class="form-control" value="${carProducer.producerName}" required>
-                  </div>
-                  <div class="form-group">
-                    <label>Address</label>
-                    <input type="text" name="address" class="form-control" value="${carProducer.address}" required>
                   </div>
                   <div class="form-group">
                     <label>Country</label>

@@ -3,7 +3,7 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <title>FUCarRentingSystem</title>
+  <title>FUCarRentingSystem - Listing</title>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -26,7 +26,7 @@
 
 <body>
 <div class="site-wrap" id="home-section">
-  <header class="site-navbar site-navbar-target" role="banner">
+  <header class="site-navbar site-navbar-target bg-white" role="banner">
 
     <div class="container">
       <div class="row align-items-center position-relative">
@@ -65,15 +65,11 @@
   </header>
 
 
-  <div class="hero inner-page" style="background-image: url('${pageContext.request.contextPath}images/hero_1_a.jpg');">
+  <div class="hero inner-page" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
 
     <div class="container">
       <div class="row align-items-end ">
         <div class="col-lg-5">
-
-          <div class="intro">
-            <h1><strong>Listings</strong></h1>
-          </div>
 
         </div>
       </div>
@@ -92,12 +88,12 @@
           <form class="col-md-12 d-flex" action="/search" method="get">
             <div class="mb-3 mb-md-0 col-md-5">
               <div class="form-control-wrap">
-                <input type="text" name="from" placeholder="Pick up" class="form-control datepicker px-3">
+                <input type="date" name="from" placeholder="Pick up" value="${from}" class="form-control px-3">
               </div>
             </div>
             <div class="mb-3 mb-md-0 col-md-5">
               <div class="form-control-wrap">
-                <input type="text" name="to" placeholder="Drop off" class="form-control datepicker px-3">
+                <input type="date" name="to" placeholder="Drop off" value="${to}" class="form-control px-3">
               </div>
             </div>
             <div class="mb-3 mb-md-0 col-md-2">

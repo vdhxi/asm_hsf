@@ -4,7 +4,7 @@
 <html lang="en">
 
   <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem - Profile</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -30,7 +30,7 @@
     
     <div class="site-wrap" id="home-section">
 
-      <header class="site-navbar site-navbar-target" role="banner">
+      <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
           <div class="row align-items-center position-relative">
@@ -67,27 +67,19 @@
       </header>
 
       
-      <div class="hero inner-page" style="background-image: url('${pageContext.request.contextPath}images/hero_1_a.jpg');">
-        
-        <div class="container">
-          <div class="row align-items-end ">
-            <div class="col-lg-5">
+      <div class="hero inner-page" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
 
-              <div class="intro">
-                <h1><strong>My profile</strong></h1>
-              </div>
-
-            </div>
-          </div>
-        </div>
       </div>
 
     
 
     <div class="site-section bg-light" id="contact-section">
       <div class="container">
-        <div class="row justify-content-center text-center">
-      </div>
+        <div class="row d-flex">
+          <div class="col-lg-7">
+            <h2 class="section-heading"><strong>MY RENTAL</strong></h2>
+          </div>
+        </div>
         <div class="row">
           <div class="col-lg-8 mb-5" >
             <div class="form-group row">
@@ -103,15 +95,30 @@
                 <c:forEach items="${carRentalList}" var="carRental">
                   <tr>
                     <td>#${carRental.id}</td>
-                    <td><strong>${carRental.status}</strong></td>
+                    <td class="badge
+                          ${carRental.status == 'PENDING' ? 'badge-warning' :
+                            carRental.status == 'RENTING' ? 'badge-primary' :
+                            carRental.status == 'COMPLETED' ? 'badge-success' :
+                            carRental.status == 'CANCELLED' ? 'badge-danger' :
+                            'badge-secondary'}">
+                        ${carRental.status}
+                    </td>
                     <td class="text-center">
                       <button type="button" class="btn btn-outline-primary btn-block" data-toggle="modal" data-target="#detailModal_${carRental.id}">
                         View detail
                       </button>
-                      <c:if test="${carRental.status == 'COMPLETED'}">
+                      <c:if test="${carRental.status == 'COMPLETED' && !carRental.reviewed}">
                         <button type="button" class="btn btn-outline-secondary btn-block" data-toggle="modal" data-target="#reviewModal_${carRental.id}">
                           Review
                         </button>
+                      </c:if>
+                      <c:if test="${carRental.status == 'WAITING'}">
+                        <form action="/rent/cancel" method="post">
+                          <input type="hidden" name="id" value="${carRental.id}">
+                          <button type="submit" class="btn btn-outline-danger btn-block">
+                            Cancel
+                          </button>
+                        </form>
                       </c:if>
                     </td>
                   </tr>
@@ -306,7 +313,7 @@
                       <img src="${carRental.car.url}" alt="Image" class="img-fluid" style="width: 300px; height: 200px">
                     </div>
                     <div class="listing-contents h-100">
-                      <form action="/user/review" method="post">
+                      <form action="/rent/review" method="post">
                         <h2><strong>${carRental.car.carName}</strong></h2>
                         <h4>${carRental.car.producer.producerName}</h4>
                         <div class="form-group">
@@ -321,7 +328,7 @@
                         </div>
                         <div class="d-block d-md-flex mb-3 border-bottom pb-3">
                           <button class="btn-block btn btn-outline-primary" type="submit">Post</button>
-                          <input type="hidden" name="id" value="${carRental.car.id}">
+                          <input type="hidden" name="id" value="${carRental.id}">
                         </div>
                       </form>
                     </div>

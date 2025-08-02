@@ -8,6 +8,7 @@ import hsf.project.repository.CarProducerRepository;
 import hsf.project.repository.CarRentalRepository;
 import hsf.project.repository.CarRepository;
 import hsf.project.service.CarService;
+import hsf.project.service.SupabaseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
@@ -17,7 +18,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,47 +29,61 @@ public class CarServiceImpl implements CarService {
     CarRepository carRepository;
     CarProducerRepository carProducerRepository;
     CarRentalRepository carRentalRepository;
-    SupabaseServiceImpl supabaseService;
+    SupabaseService supabaseService;
 
     public Car findCarById(int id) {
         return carRepository.findById(id);
     }
 
     public List<Car> getAllCars() {
-        return carRepository.findAll();
+        List<Car> carList = carRepository.findAllByIsActiveTrue();
+        LocalDate from = LocalDate.now();
+        LocalDate to = LocalDate.now();
+        List<RentalStatus> status = List.of(RentalStatus.CANCELLED, RentalStatus.COMPLETED);
+        for (Car car : carList) {
+            /*List<CarRental> condition1 = carRentalRepository.findByCarAndPickupDateBetweenAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition2 = carRentalRepository.findByCarAndReturnDateBetweenAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition3 = carRentalRepository.findByCarAndPickupDateAfterAndReturnDateBeforeAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition4 = carRentalRepository.findByCarAndPickupDateBeforeAndReturnDateAfterAndStatusNotIn(car, from, to, status);
+            if (condition1.isEmpty() && condition2.isEmpty() && condition3.isEmpty() && condition4.isEmpty()) {
+                car.setRented(false);
+                carRepository.save(car);
+            }*/
+            if (checkCarAvailable(car, from, to, status)) {
+                car.setRented(false);
+                carRepository.save(car);
+            }
+
+        }
+        return carList;
     }
 
-    @Transactional
     public List<Car> getAllCarsAvailableBetween(LocalDate from, LocalDate to) {
-        List<CarRental> carPickupList = new ArrayList<>(carRentalRepository.findByPickupDateBetween(from, to));
-        List<CarRental> carReturnList = new ArrayList<>(carRentalRepository.findByReturnDateBetween(from, to));
-        Set<CarRental> carRentals = new HashSet<>(carPickupList);
-        carRentals.addAll(carReturnList);
-        List<CarRental> carRentalList = new ArrayList<>(carRentals);
-        List<Car> carList = new ArrayList<>(carRepository.findAll());
-        List<Car> carsRented = new ArrayList<>();
-        if (!carRentalList.isEmpty()) {
-            for (CarRental carRental : carRentalList) {
-                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.RENTING);
-                    carRental.getCar().setRented(true);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.COMPLETED);
-                    carRental.getCar().setRented(false);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-                if (carRental.getStatus() != RentalStatus.COMPLETED) {
-                    carsRented.add(carRental.getCar());
-                }
+        List<Car> carList = carRepository.findAllByIsActiveTrue();
+        List<Car> carAvailableList = new ArrayList<>();
+        List<RentalStatus> status = List.of(RentalStatus.CANCELLED, RentalStatus.COMPLETED);
+        for (Car car : carList) {
+            /*List<CarRental> condition1 = carRentalRepository.findByCarAndPickupDateBetweenAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition2 = carRentalRepository.findByCarAndReturnDateBetweenAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition3 = carRentalRepository.findByCarAndPickupDateAfterAndReturnDateBeforeAndStatusNotIn(car, from, to, status);
+            List<CarRental> condition4 = carRentalRepository.findByCarAndPickupDateBeforeAndReturnDateAfterAndStatusNotIn(car, from, to, status);
+            if (condition1.isEmpty() && condition2.isEmpty() && condition3.isEmpty() && condition4.isEmpty()) {
+                carAvailableList.add(car);
+            }*/
+            if (checkCarAvailable(car, from, to, status)) {
+                carAvailableList.add(car);
             }
         }
-        carList.removeAll(carsRented);
-        carList.retainAll(getAllCarsAvailable());
-        return carList;
+        return carAvailableList;
+    }
+
+    //If car have the rental in condition => not  available
+    private boolean checkCarAvailable(Car car, LocalDate from, LocalDate to, List<RentalStatus> status) {
+        List<CarRental> condition1 = carRentalRepository.findByCarAndPickupDateBetweenAndStatusNotIn(car, from, to, status);
+        List<CarRental> condition2 = carRentalRepository.findByCarAndReturnDateBetweenAndStatusNotIn(car, from, to, status);
+        List<CarRental> condition3 = carRentalRepository.findByCarAndPickupDateAfterAndReturnDateBeforeAndStatusNotIn(car, from, to, status);
+        List<CarRental> condition4 = carRentalRepository.findByCarAndPickupDateBeforeAndReturnDateAfterAndStatusNotIn(car, from, to, status);
+        return condition1.isEmpty() && condition2.isEmpty() && condition3.isEmpty() && condition4.isEmpty();
     }
 
     public List<Car> getAllCarsByBrand(int id, List<Car> carList) {
@@ -107,24 +124,16 @@ public class CarServiceImpl implements CarService {
 
     public List<Car> sortByPriceAscending(List<Car> carList) {
         if (!carList.isEmpty()) {
-            Collections.sort(carList, Comparator.comparingInt(Car::getRentPrice));
+            carList.sort(Comparator.comparingInt(Car::getRentPrice));
         }
         return carList;
     }
 
     public List<Car> sortByPriceDescending(List<Car> carList) {
         if (!carList.isEmpty()) {
-            Collections.sort(carList, Comparator.comparingInt(Car::getRentPrice).reversed());
+            carList.sort(Comparator.comparingInt(Car::getRentPrice).reversed());
         }
         return carList;
-    }
-
-    public List<Car> getAllCarsRented() {
-        return carRepository.findByIsRentedTrue();
-    }
-
-    public List<Car> getAllCarsAvailable() {
-        return carRepository.findByIsRentedFalse();
     }
 
     @Transactional
@@ -141,6 +150,7 @@ public class CarServiceImpl implements CarService {
                     .importDate(importDate)
                     .rentPrice(price)
                     .isRented(false)
+                    .isActive(true)
                     .build();
             if (carProducer != null) {
                 car.setProducer(carProducer);
@@ -189,23 +199,26 @@ public class CarServiceImpl implements CarService {
 
     @Transactional
     public void deleteCar(int id) {
-        try {
-            Car car = carRepository.findById(id);
-            if (car != null) {
+        Car car = carRepository.findById(id);
+        if (!car.getCarRentalList().isEmpty()) {
+            car.setActive(false);
+            carRepository.save(car);
+        } else {
+            try {
                 supabaseService.delete("Car_"+id);
                 carRepository.delete(car);
+            } catch (IOException e) {
+                System.err.println("Failed to delete : " + e.getMessage());
             }
-        } catch (IOException e) {
-            System.err.println("Failed to delete : " + e.getMessage());
         }
     }
 
     public int countTotalCars() {
-        return carRepository.findAll().size();
+        return carRepository.findAllByIsActiveTrue().size();
     }
 
     public int countRentedCars() {
-        return carRepository.findByIsRentedTrue().size();
+        return carRepository.findByIsRentedTrueAndIsActiveTrue().size();
     }
 
     public int countUnRentedCars() {

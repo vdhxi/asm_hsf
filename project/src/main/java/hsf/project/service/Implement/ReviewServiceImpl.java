@@ -36,14 +36,14 @@ public class ReviewServiceImpl implements ReviewService {
     }
 
     @Transactional
-    public void createReview(String comment, int rating, Customer customer, Car car) {
+    public Review createReview(String comment, int rating, Customer customer, Car car) {
         Review review = Review.builder()
                 .comment(comment)
                 .reviewStar(rating)
                 .customer(customer)
                 .car(car)
                 .build();
-        reviewRepository.save(review);
+        return reviewRepository.save(review);
     }
 
     @Transactional

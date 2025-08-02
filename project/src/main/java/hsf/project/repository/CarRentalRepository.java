@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CarRentalRepository extends CrudRepository<CarRental, Integer> {
@@ -18,21 +19,21 @@ public interface CarRentalRepository extends CrudRepository<CarRental, Integer> 
 
     List<CarRental> findByCustomer(Customer customer);
 
-    List<CarRental> findByCar(Car car);
-
-    List<CarRental> findByPickupDateBetween(LocalDate startDate, LocalDate endDate);
-
-    List<CarRental> findByReturnDateBetween(LocalDate startDate, LocalDate endDate);
+    List<CarRental> findByPickupDateAfterAndReturnDateBefore(LocalDate pickupDate, LocalDate returnDate);
 
     List<CarRental> findByRentPriceBetween(int min, int max);
-
-    List<CarRental> findByPickupDateAfterAndReturnDateBefore(LocalDate pickupDate, LocalDate returnDate);
 
     List<CarRental> findByStatus(RentalStatus status);
 
     List<CarRental> findByCarProducer(CarProducer carProducer);
 
     CarRental findById(int id);
+
+
+    List<CarRental> findByCarAndPickupDateBetweenAndStatusNotIn(Car car, LocalDate from, LocalDate to, List<RentalStatus> status);
+    List<CarRental> findByCarAndReturnDateBetweenAndStatusNotIn(Car car, LocalDate from, LocalDate to, List<RentalStatus> status);
+    List<CarRental> findByCarAndPickupDateAfterAndReturnDateBeforeAndStatusNotIn(Car car, LocalDate from, LocalDate to, List<RentalStatus> status);
+    List<CarRental> findByCarAndPickupDateBeforeAndReturnDateAfterAndStatusNotIn(Car car, LocalDate from, LocalDate to, List<RentalStatus> status);
 }
 
 

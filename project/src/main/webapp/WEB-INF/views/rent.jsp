@@ -3,7 +3,7 @@
 <html lang="en">
 
 <head>
-    <title>FUCarRentingSystem</title>
+    <title>FUCarRentingSystem - Rent</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -26,7 +26,7 @@
 
 <body>
 <div class="site-wrap" id="home-section">
-    <header class="site-navbar site-navbar-target" role="banner">
+    <header class="site-navbar site-navbar-target bg-white" role="banner">
 
         <div class="container">
             <div class="row align-items-center position-relative">
@@ -62,17 +62,11 @@
 
     </header>
 
-    <div class="hero" style="background-image: url('${pageContext.request.contextPath}/images/hero_1_a.jpg');">
+    <div class="hero" style="background-image: url(https://ggofzyfoccoknwqvheka.supabase.co/storage/v1/object/public/image//bg.jpg);">
 
         <div class="container">
             <div class="row align-items-center justify-content-center">
                 <div class="col-lg-10">
-
-                    <div class="row mb-5">
-                        <div class="col-lg-7 intro">
-                            <h1><strong>Rent a car</strong> is within your finger tips.</h1>
-                        </div>
-                    </div>
 
                     <form class="trip-form" action="/rent/create" method="post">
                         <h3><strong>Fill out to start your journey now</strong></h3>
@@ -87,20 +81,22 @@
                             <div class="mb-3 mb-md-0 col-md-3">
                                 Pickup Date
                                 <div class="form-control-wrap">
-                                    <input type="date" name="pickUpDate" placeholder="pickUpDate" class="form-control" required>
+                                    <input type="date" name="pickUpDate" id="pickUpDate" placeholder="pickUpDate"
+                                           value="${from}" class="form-control" required min="">
+
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
                                 Return Date
                                 <div class="form-control-wrap">
-                                    <input type="date" name="returnDate" placeholder="Date of birth" class="form-control" required>
+                                    <input type="date" name="returnDate" placeholder="Return date" value="${to}" class="form-control" required>
                                 </div>
                             </div>
                             <div class="mb-6 mb-md-0 col-md-6">
                                 Total
                                 <div class="form-control-wrap">
-                                    <input type="number" id="totalPrice" name="totalPrice" class="form-control" readonly data-rent-price="${car.rentPrice}">
-                                    <input type="hidden" id="hiddenTotalPrice" name="totalPrice">
+                                    <input type="hidden" id="totalPrice" name="totalPrice" class="form-control" readonly data-rent-price="${car.rentPrice}">
+                                    <input type="number" id="hiddenTotalPrice" name="totalPrice" class="form-control" readonly>
                                 </div>
                             </div>
                             <div class="mb-3 mb-md-0 col-md-3">
@@ -158,32 +154,46 @@
         const totalPrice = document.getElementById("totalPrice");
         const hiddenTotalPrice = document.getElementById("hiddenTotalPrice");
 
-        // Lấy giá trị thuê xe từ data attribute (tránh lỗi JSTL)
-        const rentPrice = parseInt(totalPrice.dataset.rentPrice);
+        // Lấy giá thuê xe đúng cách
+        const rentPrice = parseInt(totalPrice.getAttribute("data-rent-price"));
 
         function calculateTotal() {
             const startDate = new Date(pickUpDate.value);
             const endDate = new Date(returnDate.value);
 
             if (!isNaN(startDate) && !isNaN(endDate) && endDate >= startDate) {
-                let diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24); // Tính số ngày thuê
-                if (diffDays === 0) {
-                    diffDays = 1
-                }
-                const total = rentPrice * diffDays; // Nhân với giá thuê mỗi ngày
-                totalPrice.value = total;
-                hiddenTotalPrice.value = total; // Đảm bảo gửi lên form
+                let diffDays = (endDate - startDate) / (1000 * 60 * 60 * 24);
+                diffDays = Math.max(0.5, diffDays);
+                const total = rentPrice * diffDays;
+
+                // Update both fields
+                hiddenTotalPrice.value = total;
             } else {
-                totalPrice.value = rentPrice;
-                hiddenTotalPrice.value = rentPrice;
+                const total = rentPrice * 0.5;
+                hiddenTotalPrice.value = total;
             }
         }
+
+        // Calculate initial total when page loads
+        calculateTotal();
 
         pickUpDate.addEventListener("change", calculateTotal);
         returnDate.addEventListener("change", calculateTotal);
     });
 </script>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        // Lấy input ngày pickup
+        const pickUpDateInput = document.getElementById("pickUpDate");
 
+        // Lấy ngày hôm nay dưới dạng yyyy-MM-dd
+        const today = new Date().toISOString().split("T")[0];
+
+        // Đặt giá trị min cho input
+        pickUpDateInput.setAttribute("min", today);
+    });
+
+</script>
 </body>
 
 </html>

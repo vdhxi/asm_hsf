@@ -7,7 +7,8 @@ import java.util.List;
 public interface CarProducerService {
     CarProducer getCarProducer(int id);
     List<CarProducer> getAllCarProducers();
-    void saveCarProducer(String producerName, String address, String country);
-    void updateCarProducer(int id, String producerName, String address, String country);
+    CarProducer saveCarProducer(String producerName, String country);
+    void updateCarProducer(int id, String producerName, String country);
     void deleteCarProducer(int id);
+
 }

@@ -2,10 +2,8 @@ package hsf.project.service.Implement;
 
 import hsf.project.enums.RentalStatus;
 import hsf.project.pojo.Car;
-import hsf.project.pojo.CarProducer;
 import hsf.project.pojo.CarRental;
 import hsf.project.pojo.Customer;
-import hsf.project.repository.CarProducerRepository;
 import hsf.project.repository.CarRentalRepository;
 import hsf.project.repository.CarRepository;
 import hsf.project.service.CarRentalService;
@@ -16,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
-import java.time.Period;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -33,47 +30,16 @@ public class CarRentalServiceImpl implements CarRentalService {
     }
 
     public List<CarRental> getAllCarRentals() {
-        List<CarRental> list = carRentalRepository.findAll();
-        if (!list.isEmpty()) {
-            for (CarRental carRental : list) {
-                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.RENTING);
-                    carRental.getCar().setRented(true);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.COMPLETED);
-                    carRental.getCar().setRented(false);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-            }
-        }
-        return list;
+        return carRentalRepository.findAll();
     }
 
     public List<CarRental> getAllByCustomer(Customer customer) {
-        List<CarRental> list = carRentalRepository.findByCustomer(customer);
-        if (!list.isEmpty()) {
-            for (CarRental carRental : list) {
-                if (!carRental.getPickupDate().isAfter(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.RENTING);
-                    carRental.getCar().setRented(true);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-                if (carRental.getReturnDate().isBefore(LocalDate.now())) {
-                    carRental.setStatus(RentalStatus.COMPLETED);
-                    carRental.getCar().setRented(false);
-                    carRentalRepository.save(carRental);
-                    carRepository.save(carRental.getCar());
-                }
-            }
-        }
-        return list;
+        return carRentalRepository.findByCustomer(customer);
     }
 
+    public List<CarRental> getAllByDateBetween(LocalDate startDate, LocalDate endDate) {
+        return carRentalRepository.findByPickupDateAfterAndReturnDateBefore(startDate.minusDays(1), endDate.plusDays(1));
+    }
 
 
     public List<CarRental> getAllByRentStatus(RentalStatus status) {
@@ -81,20 +47,25 @@ public class CarRentalServiceImpl implements CarRentalService {
     }
 
     @Transactional
-    public void createCarRental(LocalDate pickupDate, LocalDate returnDate, int price, Customer customer, Car car) {
+    public CarRental createCarRental(LocalDate pickupDate, LocalDate returnDate, int price, Customer customer, Car car) {
+        RentalStatus status = RentalStatus.WAITING;
+        if (pickupDate.equals(LocalDate.now())) {
+            status = RentalStatus.RENTING;
+        }
         CarRental carRental = CarRental.builder()
                 .pickupDate(pickupDate)
                 .returnDate(returnDate)
                 .rentPrice(price)
-                .status(RentalStatus.WAITING)
+                .status(status)
                 .customer(customer)
                 .car(car)
+                .isReviewed(false)
                 .build();
         if (pickupDate.equals(LocalDate.now())) {
             car.setRented(true);
             carRepository.save(car);
         }
-        carRentalRepository.save(carRental);
+        return carRentalRepository.save(carRental);
     }
 
     @Transactional
@@ -102,6 +73,10 @@ public class CarRentalServiceImpl implements CarRentalService {
         CarRental carRental = getCarRentalById(id);
         int price = carRental.getCar().getRentPrice()*(int) ChronoUnit.DAYS.between(carRental.getPickupDate(), returnDate);
         carRental.setReturnDate(returnDate);
+
+        if (carRental.getPickupDate().equals(returnDate)) {
+            price = (int) (carRental.getCar().getRentPrice() * 0.5);
+        }
         carRental.setRentPrice(price);
         if (returnDate.equals(LocalDate.now())) {
             updateStatus(carRental, RentalStatus.COMPLETED);
@@ -120,6 +95,23 @@ public class CarRentalServiceImpl implements CarRentalService {
             car.setRented(false);
             carRepository.save(car);
         }
+        carRentalRepository.save(carRental);
+    }
+
+    @Transactional
+    public void cancelCarRental(int id) {
+        CarRental carRental = getCarRentalById(id);
+        Car car = carRental.getCar();
+        carRental.setStatus(RentalStatus.CANCELLED);
+        car.setRented(false);
+        carRepository.save(car);
+        carRentalRepository.save(carRental);
+    }
+
+    @Transactional
+    public void markReviewed(int id) {
+        CarRental carRental = getCarRentalById(id);
+        carRental.setReviewed(true);
         carRentalRepository.save(carRental);
     }
 

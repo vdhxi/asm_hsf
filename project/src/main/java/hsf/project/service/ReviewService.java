@@ -11,7 +11,8 @@ public interface ReviewService {
     List<Review> getAllReviews();
     List<Review> getReviewsByCar(Car car);
     List<Review> getReviewsByCustomer(Customer customer);
-    void createReview(String comment, int rating, Customer customer, Car car);
+    Review createReview(String comment, int rating, Customer customer, Car car);
     void updateReview(int id, String comment, int rating);
     void deleteReviewById(int id);
+
 }

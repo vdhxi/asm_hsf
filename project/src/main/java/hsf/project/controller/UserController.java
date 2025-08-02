@@ -1,10 +1,8 @@
 package hsf.project.controller;
 
-import hsf.project.pojo.Car;
+
 import hsf.project.pojo.Customer;
-import hsf.project.service.CarService;
 import hsf.project.service.CustomerService;
-import hsf.project.service.ReviewService;
 import jakarta.servlet.http.HttpSession;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -21,8 +19,6 @@ import java.time.LocalDate;
 @RequestMapping("/user")
 public class UserController {
     CustomerService customerService;
-    ReviewService reviewService;
-    CarService carService;
 
     @PostMapping("/add")
     public String addUser(String name, String mobile, String email, String password, LocalDate birthday, LocalDate licenceDate, String identity, String licenceNumber) {
@@ -59,16 +55,5 @@ public class UserController {
     public String deleteUser(int id) {
         customerService.delete(id);
         return "redirect:/management";
-    }
-
-    @PostMapping("/review")
-    public String review(HttpSession session, String comment, int rating, int id) {
-        Customer customer = (Customer) session.getAttribute("customer");
-        Car car = carService.findCarById(id);
-        if (customer == null) {
-            return "login";
-        }
-        reviewService.createReview(comment, rating, customer, car);
-        return "redirect:/profile";
     }
 }

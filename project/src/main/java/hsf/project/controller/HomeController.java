@@ -68,6 +68,8 @@ public class HomeController {
         if (to == null) {
             to = LocalDate.now();
         }
+        session.setAttribute("from", from);
+        session.setAttribute("to", to);
         List<Car> carList = carService.getAllCarsAvailableBetween(from, to);
         session.setAttribute("carList", carList);
         session.setAttribute("listInit", carList);
