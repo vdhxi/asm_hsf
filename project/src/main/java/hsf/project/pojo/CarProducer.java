@@ -20,7 +20,6 @@ public class CarProducer {
     int id;
     @Column(unique=true)
     String producerName;
-    String address;
     String country;
 
     @OneToMany(mappedBy = "producer", cascade = CascadeType.ALL)
