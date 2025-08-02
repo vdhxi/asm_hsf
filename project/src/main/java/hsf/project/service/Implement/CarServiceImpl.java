@@ -12,6 +12,8 @@ import hsf.project.service.SupabaseService;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +28,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE, makeFinal = true)
 public class CarServiceImpl implements CarService {
+    private static final Logger log = LoggerFactory.getLogger(CarServiceImpl.class);
     CarRepository carRepository;
     CarProducerRepository carProducerRepository;
     CarRentalRepository carRentalRepository;
@@ -141,6 +144,24 @@ public class CarServiceImpl implements CarService {
         try {
             CarProducer carProducer = carProducerRepository.findById(producerId).orElse(null);
             LocalDate importDate = LocalDate.now();
+
+            List<String> errors = new ArrayList<>();
+            //Validation
+            if (year < 1885) {
+                errors.add("Year invalid");
+            } else if (capacity <= 0) {
+                errors.add("Capacity must be greater than 0");
+            } else if (price <= 0) {
+                errors.add("Price must be greater than 0");
+            }
+            //Return errors if happen
+            if (!errors.isEmpty()) {
+                for (String error : errors) {
+                    log.info(error);
+                }
+                throw new RuntimeException();
+            }
+
             Car car = Car.builder()
                     .carName(name)
                     .carModelYear(year)
@@ -165,7 +186,6 @@ public class CarServiceImpl implements CarService {
         } catch (IOException e) {
             System.err.println("Failed to save : " + e.getMessage());
         }
-
     }
 
     @Transactional
@@ -174,6 +194,23 @@ public class CarServiceImpl implements CarService {
             CarProducer carProducer = carProducerRepository.findById(producerId).orElse(null);
             Car car = carRepository.findById(id);
             if (car != null) {
+                List<String> errors = new ArrayList<>();
+                //Validation
+                if (year < 1885) {
+                    errors.add("Year invalid");
+                } else if (capacity <= 0) {
+                    errors.add("Capacity must be greater than 0");
+                } else if (price <= 0) {
+                    errors.add("Price must be greater than 0");
+                }
+                //Return errors if happen
+                if (!errors.isEmpty()) {
+                    for (String error : errors) {
+                        log.info(error);
+                    }
+                    throw new RuntimeException();
+                }
+
                 if (!name.isEmpty()) car.setCarName(name);
                 if (year != car.getCarModelYear()) car.setCarModelYear(year);
                 if (!color.isEmpty()) car.setColor(color);
